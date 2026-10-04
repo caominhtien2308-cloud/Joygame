@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiến Và Cuộc Phiêu Lưu 3 Cõi</title>
+  <meta name="description" content="Game giải đố phiêu lưu đánh quái - Tiến Và Cuộc Phiêu Lưu 3 Cõi" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ===== PARTICLE CONTAINER ===== -->
+  <div id="particle-container"></div>
+
+  <!-- ===== SCREEN: TITLE ===== -->
+  <div id="screen-title" class="screen active">
+    <div class="title-bg"></div>
+    <div class="title-content">
+      <div class="title-decoration top-deco">✦ ✦ ✦</div>
+      <h1 class="game-title">
+        <span class="title-line1">TIẾN VÀ</span>
+        <span class="title-line2">CUỘC PHIÊU LƯU</span>
+        <span class="title-line3">3 CÕI</span>
+      </h1>
+      <p class="title-subtitle">Fantasy · Adventure · Comedy</p>
+      <div class="title-decoration bot-deco">✦ ✦ ✦</div>
+      <button id="btn-start" class="btn btn-primary btn-glow" onclick="startGame()">
+        ⚔ BẮT ĐẦU ⚔
+      </button>
+    </div>
+    <div class="floating-icons">
+      <span class="float-icon" style="--delay:0s; --x:10%">🌿</span>
+      <span class="float-icon" style="--delay:1s; --x:80%">🔥</span>
+      <span class="float-icon" style="--delay:2s; --x:50%">🏘️</span>
+      <span class="float-icon" style="--delay:0.5s; --x:30%">⚔</span>
+      <span class="float-icon" style="--delay:1.5s; --x:65%">✨</span>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: WORLD SELECT ===== -->
+  <div id="screen-world-select" class="screen">
+    <div class="world-select-bg"></div>
+    <div class="world-select-content">
+      <h2 class="section-title">🗺 CHỌN THẾ GIỚI</h2>
+      <p class="section-sub">Hoàn thành cả 3 cõi để giải phóng phần thưởng cuối!</p>
+      <div id="progress-panel" class="progress-panel">
+        <div class="progress-title">TIẾN ĐỘ</div>
+        <div class="progress-items">
+          <div id="prog-linh" class="prog-item">☐ Linh Giới</div>
+          <div id="prog-ma" class="prog-item">☐ Ma Giới</div>
+          <div id="prog-nhan" class="prog-item">☐ Nhân Giới</div>
+        </div>
+      </div>
+      <div class="world-cards">
+        <div id="card-linh" class="world-card world-linh" onclick="selectWorld('linh')">
+          <div class="card-glow"></div>
+          <div class="card-icon">🌿</div>
+          <div class="card-name">LINH GIỚI</div>
+          <div class="card-desc">Thế giới của thiên thần và những sinh vật ánh sáng.</div>
+          <div class="card-status" id="status-linh"></div>
+          <div class="card-border-anim"></div>
+        </div>
+        <div id="card-ma" class="world-card world-ma" onclick="selectWorld('ma')">
+          <div class="card-glow"></div>
+          <div class="card-icon">🔥</div>
+          <div class="card-name">MA GIỚI</div>
+          <div class="card-desc">Thế giới của quỷ và những sinh vật nguy hiểm.</div>
+          <div class="card-status" id="status-ma"></div>
+          <div class="card-border-anim"></div>
+        </div>
+        <div id="card-nhan" class="world-card world-nhan" onclick="selectWorld('nhan')">
+          <div class="card-glow"></div>
+          <div class="card-icon">🏘️</div>
+          <div class="card-name">NHÂN GIỚI</div>
+          <div class="card-desc">Thế giới bình yên (?) của loài người.</div>
+          <div class="card-status" id="status-nhan"></div>
+          <div class="card-border-anim"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: GAME WORLD ===== -->
+  <div id="screen-game" class="screen">
+    <!-- HUD -->
+    <div id="hud" class="hud">
+      <div class="hud-player">
+        <span class="hud-label">⚔ TIẾN</span>
+        <div class="hp-bar-wrap">
+          <div id="player-hp-bar" class="hp-bar player-hp"></div>
+        </div>
+        <span id="player-hp-text" class="hp-text">100/100</span>
+      </div>
+      <div class="hud-world-name" id="hud-world-name">NHÂN GIỚI</div>
+      <button class="btn btn-sm btn-outline" onclick="returnToWorldSelect()">🗺 Map</button>
+    </div>
+
+    <!-- GAME CANVAS AREA -->
+    <div id="game-world" class="game-world">
+      <!-- Background layers -->
+      <div id="bg-layer-far" class="bg-layer bg-far"></div>
+      <div id="bg-layer-mid" class="bg-layer bg-mid"></div>
+      <div id="bg-layer-ground" class="bg-layer bg-ground"></div>
+
+      <!-- World decorations injected by JS -->
+      <div id="world-decorations" class="world-decorations"></div>
+
+      <!-- NPC -->
+      <div id="npc-entity" class="npc-entity hidden">
+        <div class="npc-sprite" id="npc-sprite"></div>
+        <div class="npc-name-tag" id="npc-name-tag"></div>
+        <div class="talk-bubble">💬</div>
+      </div>
+
+      <!-- Enemy -->
+      <div id="enemy-entity" class="enemy-entity hidden">
+        <div class="enemy-sprite" id="enemy-sprite"></div>
+        <div class="enemy-name-tag" id="enemy-name-tag"></div>
+        <div class="enemy-hp-wrap">
+          <div id="enemy-hp-bar" class="hp-bar enemy-hp"></div>
+        </div>
+        <span id="enemy-hp-text" class="hp-text">100/100</span>
+      </div>
+
+      <!-- Player -->
+      <div id="player-entity" class="player-entity">
+        <div id="player-sprite" class="player-sprite idle"></div>
+        <div class="player-name-tag">Tiến</div>
+      </div>
+
+      <!-- Damage numbers container -->
+      <div id="damage-numbers" class="damage-numbers"></div>
+    </div>
+
+    <!-- DIALOGUE BOX -->
+    <div id="dialogue-box" class="dialogue-box hidden">
+      <div class="dialogue-header">
+        <span id="dialogue-speaker-icon" class="dialogue-icon">👴</span>
+        <span id="dialogue-speaker" class="dialogue-speaker">Ông Già</span>
+      </div>
+      <div id="dialogue-text" class="dialogue-text"></div>
+      <div id="dialogue-answers" class="dialogue-answers hidden">
+        <!-- answer buttons injected by JS -->
+      </div>
+      <div id="dialogue-feedback" class="dialogue-feedback hidden"></div>
+      <button id="btn-dialogue-next" class="btn btn-primary btn-sm hidden" onclick="dialogueNext()">Tiếp tục →</button>
+    </div>
+
+    <!-- COMBAT UI -->
+    <div id="combat-ui" class="combat-ui hidden">
+      <div class="combat-players">
+        <div class="combat-player">
+          <div class="combat-sprite player-combat-sprite" id="combat-player-sprite"></div>
+          <div class="combat-name">⚔ Tiến</div>
+          <div class="combat-hp-wrap">
+            <div id="combat-player-hp-bar" class="hp-bar player-hp"></div>
+          </div>
+          <span id="combat-player-hp-text" class="hp-text">100/100</span>
+        </div>
+        <div class="vs-text">VS</div>
+        <div class="combat-enemy">
+          <div class="combat-sprite enemy-combat-sprite" id="combat-enemy-sprite"></div>
+          <div class="combat-name" id="combat-enemy-name">👾 Quái Vật</div>
+          <div class="combat-hp-wrap">
+            <div id="combat-enemy-hp-bar" class="hp-bar enemy-hp"></div>
+          </div>
+          <span id="combat-enemy-hp-text" class="hp-text">100/100</span>
+        </div>
+      </div>
+      <div class="combat-log" id="combat-log"></div>
+      <div class="combat-actions">
+        <button id="btn-attack" class="btn btn-danger" onclick="attackEnemy()">⚔ TẤN CÔNG</button>
+      </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="game-over" class="game-over hidden">
+      <div class="game-over-content">
+        <div class="game-over-icon">💀</div>
+        <h2>GAME OVER</h2>
+        <p>Tiến đã ngã xuống...</p>
+        <button class="btn btn-primary" onclick="restartCurrentWorld()">🔄 CHƠI LẠI</button>
+      </div>
+    </div>
+
+    <!-- WORLD COMPLETE -->
+    <div id="world-complete" class="world-complete hidden">
+      <div class="world-complete-content">
+        <div class="complete-icon">🏆</div>
+        <h2 id="world-complete-title">NHÂN GIỚI ĐÃ HOÀN THÀNH!</h2>
+        <div class="complete-stars">⭐⭐⭐</div>
+        <button class="btn btn-primary" onclick="returnToWorldSelect()">🗺 Chọn Thế Giới Khác</button>
+      </div>
+    </div>
+
+    <!-- MOBILE CONTROLS -->
+    <div class="mobile-controls" id="mobile-controls">
+      <button class="ctrl-btn" id="ctrl-left" onpointerdown="startMove('left')" onpointerup="stopMove()"
+        onpointercancel="stopMove()">◀</button>
+      <button class="ctrl-btn" id="ctrl-attack" onclick="mobileAttack()">⚔</button>
+      <button class="ctrl-btn" id="ctrl-right" onpointerdown="startMove('right')" onpointerup="stopMove()"
+        onpointercancel="stopMove()">▶</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: REWARD ===== -->
+  <div id="screen-reward" class="screen">
+    <div class="reward-bg"></div>
+    <div class="reward-stars" id="reward-stars"></div>
+    <div class="reward-content">
+      <h2 class="reward-title">🏆 KHO BÁU CUỐI CÙNG</h2>
+      <p class="reward-desc">Bạn đã vượt qua cả 3 cõi.</p>
+      <p class="reward-desc">Hãy mở chiếc rương để nhận phần thưởng.</p>
+      <div id="chest" class="chest" onclick="openChest()">
+        <div class="chest-body">
+          <div class="chest-lid" id="chest-lid">
+            <div class="chest-question">?</div>
+          </div>
+          <div class="chest-base"></div>
+        </div>
+        <div class="chest-glow"></div>
+        <div class="chest-particles" id="chest-particles"></div>
+      </div>
+      <button id="btn-open-chest" class="btn btn-gold btn-glow" onclick="openChest()">🔓 MỞ RƯƠNG</button>
+    </div>
+
+    <!-- REWARD REVEAL -->
+    <div id="reward-reveal" class="reward-reveal hidden">
+      <div class="light-burst" id="light-burst"></div>
+      <div class="reward-paper">
+        <div class="paper-decoration">✦ ✦ ✦</div>
+        <div class="reward-main-text">Bạn được thưởng<br /><span class="reward-kiss">1 cái hun ❤️</span></div>
+        <div class="reward-congrats">NHẤT BẠN NHÉ!</div>
+        <div class="paper-decoration">✦ ✦ ✦</div>
+      </div>
+      <button class="btn btn-primary btn-glow" onclick="restartGame()" style="margin-top:2rem;">🔄 CHƠI LẠI</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
