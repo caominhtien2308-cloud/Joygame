@@ -1220,7 +1220,7 @@ function renderUserProfile() {
   const valBudget = document.getElementById('val-budget');
 
   if (valGenderAge) valGenderAge.textContent = `${gender} • ${age} tuổi`;
-  if (valBody) valBody.textContent = `Cao ${height >= 100 ? (height/100).toFixed(2).replace('.', 'm') : height + 'cm'} • Nặng ${weight}kg`;
+  if (valBody) valBody.textContent = `Cao ${height >= 100 ? (height / 100).toFixed(2).replace('.', 'm') : height + 'cm'} • Nặng ${weight}kg`;
   if (valActivity) valActivity.textContent = activity;
   if (valBudget) valBudget.textContent = `Ngân sách: ${formatVND(dailyBudget)}/ngày`;
 
@@ -1232,7 +1232,7 @@ function renderUserProfile() {
   const badgeBudget = document.getElementById('badge-budget');
 
   if (badgeGenderAge) badgeGenderAge.textContent = `👤 ${gender} ${age} tuổi`;
-  if (badgeHeight) badgeHeight.textContent = `📏 Cao ${height >= 100 ? (height/100).toFixed(2).replace('.', 'm') : height + 'cm'}`;
+  if (badgeHeight) badgeHeight.textContent = `📏 Cao ${height >= 100 ? (height / 100).toFixed(2).replace('.', 'm') : height + 'cm'}`;
   if (badgeWeight) badgeWeight.textContent = `⚖️ Nặng ${weight}kg`;
   if (badgeActivity) badgeActivity.textContent = `🏃 ${activity}`;
   if (badgeBudget) badgeBudget.textContent = `💰 Ngân sách ${formatVND(dailyBudget)}/ngày`;
@@ -2144,16 +2144,16 @@ function updateClock() {
 // -------------------------------------------------------------------
 
 const DAILY_MESSAGES = [
-  { id: 1, title: 'Thông điệp 1', text: 'Cố gắng lên, đừng vì 60 phút lười theo chế độ mà chịu 60 phút trong phòng mổ sau này' },
-  { id: 2, title: 'Thông điệp 2', text: 'Mọi sự cố gắng dù ít hay nhiều đều đem lại kết quả tốt hơn hôm nay' },
-  { id: 3, title: 'Thông điệp 3', text: 'Trong lúc bạn buông thả bản thân vì không ăn nổi thì đang có người khác hối hận vì sao ngày trước không chịu ăn thế này' },
-  { id: 4, title: 'Thông điệp 4', text: 'Chưa thấy sự thay đổi hả? Ráng lên, một chút nữa thôi, thành công đâu phải ngày 1 ngày 2 đúng chứ, cố lên' },
-  { id: 5, title: 'Thông điệp 5', text: 'Nay vui hay buồn? Thôi, làm tí ức gà đi hen' },
-  { id: 6, title: 'Thông điệp 6', text: 'Ăn nhiều trái cây rau củ quả vào nhé, đẹp da lắm' },
-  { id: 7, title: 'Thông điệp 7', text: 'Ngày mới vui vẻ nhen, bạn đang làm tốt lắm, cứ tiếp tục thế nhé' },
-  { id: 8, title: 'Thông điệp 8', text: 'Đừng khóc nha, lâu lâu có thể buông thả 1 tí nhưng chỉ 1 ngày thôi nhé' },
-  { id: 9, title: 'Thông điệp 9', text: 'Huhuhuhu, ăn ức gà đê' },
-  { id: 10, title: 'Thông điệp 10', text: 'Bạn đã thành công tới đâu rồi? Mình thật sự muốn thấy bạn cười vì hạnh phúc đấy' }
+  { id: 1, title: 'Thông điệp khuyên răn', text: 'Cố gắng lên, đừng vì 60 phút lười theo chế độ mà chịu 60 phút trong phòng mổ sau này' },
+  { id: 2, title: 'Thông điệp động viên', text: 'Mọi sự cố gắng dù ít hay nhiều đều đem lại kết quả tốt hơn hôm nay' },
+  { id: 3, title: 'Thông điệp vực dậy', text: 'Trong lúc bạn buông thả bản thân vì không ăn nổi thì đang có người khác hối hận vì sao ngày trước không chịu ăn thế này' },
+  { id: 4, title: 'Thông điệp tiếp sức', text: 'Chưa thấy sự thay đổi hả? Ráng lên, một chút nữa thôi, thành công đâu phải ngày 1 ngày 2 đúng chứ, cố lên' },
+  { id: 5, title: 'Thông điệp an ủi', text: 'Nay vui hay buồn? Thôi, làm tí ức gà đi hen' },
+  { id: 6, title: 'Thông điệp đề xuất', text: 'Ăn nhiều trái cây rau củ quả vào nhé, đẹp da lắm' },
+  { id: 7, title: 'Thông điệp ủng hộ', text: 'Ngày mới vui vẻ nhen, bạn đang làm tốt lắm, cứ tiếp tục thế nhé' },
+  { id: 8, title: 'Thông điệp yêu thương', text: 'Đừng khóc nha, lâu lâu có thể buông thả 1 tí nhưng chỉ 1 ngày thôi nhé' },
+  { id: 9, title: 'Thông điệp cợt nhả', text: 'Huhuhuhu, ăn ức gà đê' },
+  { id: 10, title: 'Thông điệp hạnh phúc', text: 'Bạn đã thành công tới đâu rồi? Mình thật sự muốn thấy bạn cười vì hạnh phúc đấy' }
 ];
 
 const STORAGE_KEY_DAILY_MESSAGE = 'ankhoedangdep_daily_message_record';
