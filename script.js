@@ -1323,7 +1323,7 @@ function renderMealPlan() {
         </div>
         <div class="meal-slot-body">
           <img src="${meal.image}" alt="${meal.name}" class="meal-slot-thumb"
-            onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=120&q=80'" />
+            onerror="this.onerror=null; this.src='favicon.jpg';" />
           <div class="meal-slot-content">
             <span class="meal-slot-cat-badge-mobile">${meal.mealTitle}</span>
             <div class="meal-slot-title" title="${meal.name}">${meal.name}</div>
@@ -1461,7 +1461,8 @@ function renderDishDetail(dish) {
     imgEl.src = dish.image;
     imgEl.alt = dish.name;
     imgEl.onerror = () => {
-      imgEl.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
+      imgEl.onerror = null;
+      imgEl.src = 'favicon.jpg';
     };
   }
 
@@ -1952,6 +1953,173 @@ function showToast(message, type = 'success') {
   }, 2800);
 }
 
+// -------------------------------------------------------------------
+// 5B. REAL-TIME ANALOG CLOCK & MEAL TIME PERIOD SYSTEM
+// -------------------------------------------------------------------
+
+/**
+ * Phân chia khung giờ theo thời gian thực của thiết bị
+ * - 5h00 - 11h00: Khung giờ sáng -> Bữa sáng (sang)
+ * - 11h01 - 13h30 (1h30 chiều): Khung giờ trưa -> Bữa trưa (trua)
+ * - 13h31 - 16h00 (4h chiều): Khung giờ xế -> Bữa phụ (phu)
+ * - 16h01 - 22h00 (10h tối): Khung giờ đêm -> Bữa tối (toi)
+ */
+function getCurrentTimePeriodInfo(now = new Date()) {
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const totalMinutes = hours * 60 + minutes;
+
+  if (totalMinutes >= 300 && totalMinutes <= 660) {
+    // 5h00 sáng tới 11h00
+    return {
+      mealType: 'sang',
+      periodName: 'Khung giờ sáng',
+      mealTitle: 'Bữa sáng',
+      timeRange: '5h00 - 11h00',
+      icon: '🌅'
+    };
+  } else if (totalMinutes >= 661 && totalMinutes <= 810) {
+    // 11h01 tới 1h30 chiều (13h30)
+    return {
+      mealType: 'trua',
+      periodName: 'Khung giờ trưa',
+      mealTitle: 'Bữa trưa',
+      timeRange: '11h01 - 13h30',
+      icon: '☀️'
+    };
+  } else if (totalMinutes >= 811 && totalMinutes <= 960) {
+    // 1h31 tới 4h chiều (16h00)
+    return {
+      mealType: 'phu',
+      periodName: 'Khung giờ xế',
+      mealTitle: 'Bữa phụ',
+      timeRange: '13h31 - 16h00',
+      icon: '🍵'
+    };
+  } else if (totalMinutes >= 961 && totalMinutes <= 1320) {
+    // 4h01 tới 10h tối (22h00)
+    return {
+      mealType: 'toi',
+      periodName: 'Khung giờ đêm',
+      mealTitle: 'Bữa tối',
+      timeRange: '16h01 - 22h00',
+      icon: '🌙'
+    };
+  } else {
+    // 22h01 đêm tới trước 5h sáng (nghỉ ngơi)
+    return {
+      mealType: 'sang',
+      periodName: 'Giờ nghỉ ngơi',
+      mealTitle: 'Bữa sáng',
+      timeRange: '22h01 - 4h59',
+      icon: '✨',
+      isLateNight: true
+    };
+  }
+}
+
+/**
+ * Lấy ID ngày trong tuần từ thiết bị
+ */
+function getCurrentDayId(now = new Date()) {
+  const dayOfWeek = now.getDay(); // 0 là Chủ nhật, 1 là Thứ 2, ...
+  const dayMap = {
+    1: 'thu2',
+    2: 'thu3',
+    3: 'thu4',
+    4: 'thu5',
+    5: 'thu6',
+    6: 'thu7',
+    0: 'chunhat'
+  };
+  return dayMap[dayOfWeek] || 'thu2';
+}
+
+/**
+ * Cập nhật kim đồng hồ chạy thời gian thực liên kết với giờ thiết bị
+ */
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+
+  const secondDeg = seconds * 6;
+  const minuteDeg = (minutes + seconds / 60) * 6;
+  const hourDeg = ((hours % 12) + minutes / 60 + seconds / 3600) * 30;
+
+  const hourHand = document.getElementById('clock-hand-hour');
+  const minuteHand = document.getElementById('clock-hand-minute');
+  const secondHand = document.getElementById('clock-hand-second');
+  const digitalTimeEl = document.getElementById('clock-digital-time');
+  const periodTextEl = document.getElementById('clock-period-text');
+
+  if (hourHand) hourHand.style.transform = `rotate(${hourDeg}deg)`;
+  if (minuteHand) minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+  if (secondHand) secondHand.style.transform = `rotate(${secondDeg}deg)`;
+
+  const pad = n => String(n).padStart(2, '0');
+  if (digitalTimeEl) {
+    digitalTimeEl.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  const periodInfo = getCurrentTimePeriodInfo(now);
+  if (periodTextEl) {
+    periodTextEl.textContent = periodInfo.periodName;
+  }
+}
+
+/**
+ * Xử lý khi nhấn vào đồng hồ: hiện món ăn ứng với buổi đó và thứ đó
+ */
+function handleClockWidgetClick() {
+  const now = new Date();
+  const periodInfo = getCurrentTimePeriodInfo(now);
+  const currentDayId = getCurrentDayId(now);
+  const currentDayConfig = DAYS_CONFIG.find(d => d.id === currentDayId);
+  const dayName = currentDayConfig ? currentDayConfig.name : 'Hôm nay';
+
+  // 1. Chuyển sang Thực đơn 7 ngày nếu đang ở trang khác
+  if (state.currentView !== 'menu7d') {
+    switchView('menu7d');
+  }
+
+  // 2. Chọn thứ tương ứng
+  state.selectedDay = currentDayId;
+  state.mealFilter = 'all'; // Đặt lại bộ lọc để chắc chắn món hiển thị
+  updateFilterButtons();
+  renderMealPlan();
+
+  // 3. Tìm món ăn đúng buổi và thứ đó
+  const targetMeal = state.meals.find(m => m.day === currentDayId && m.mealType === periodInfo.mealType);
+
+  if (targetMeal) {
+    // Hiển thị chi tiết món ăn ở Panel bên phải
+    selectDish(targetMeal.id);
+
+    // Cuộn mượt đến thẻ món ăn đó trong danh sách và tạo hiệu ứng phát sáng nhẹ
+    setTimeout(() => {
+      const card = document.querySelector(`.meal-slot-fav-btn[data-id="${targetMeal.id}"]`)?.closest('.meal-slot-card');
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('pulse-highlight');
+        setTimeout(() => card.classList.remove('pulse-highlight'), 2400);
+      }
+    }, 120);
+
+    const pad = n => String(n).padStart(2, '0');
+    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+    if (periodInfo.isLateNight) {
+      showToast(`✨ [${timeStr}] Bây giờ là giờ nghỉ ngơi! Đã mở thực đơn Bữa sáng ${dayName} cho bạn.`, 'success');
+    } else {
+      showToast(`⏰ [${timeStr}] ${periodInfo.periodName} (${dayName})! Đã mở món: "${targetMeal.name.slice(0, 32)}..."`, 'success');
+    }
+  } else {
+    showToast(`Đã chuyển đến thực đơn ${dayName}!`, 'success');
+  }
+}
+
 function initEventHandlers() {
   // 1. Navigation items (Sidebar + Mobile Bottom Nav)
   document.querySelectorAll('[data-view]').forEach(el => {
@@ -1973,6 +2141,12 @@ function initEventHandlers() {
     switchView('nutrition');
     showToast('Chào bạn! Cùng khám phá bí quyết giữ dáng và sống khỏe mỗi ngày nhé!', 'success');
   });
+
+  // 2B. Analog Clock Widget click listener (gợi ý món ăn theo giờ thiết bị)
+  const clockWidget = document.getElementById('banner-clock-widget');
+  if (clockWidget) {
+    clockWidget.addEventListener('click', handleClockWidgetClick);
+  }
 
   // 3. Day tabs selection
   document.querySelectorAll('.day-tab-btn').forEach(btn => {
@@ -2304,7 +2478,7 @@ function initEventHandlers() {
 // -------------------------------------------------------------------
 // 7. INITIALIZATION ON DOM READY
 // -------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   renderUserProfile();
   renderMealPlan();
 
@@ -2315,5 +2489,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initEventHandlers();
+
+  // Khởi động đồng hồ thời gian thực
+  updateClock();
+  setInterval(updateClock, 1000);
+
   console.log('Ăn Khỏe Dáng Đẹp - Healthy Meal Planner Dashboard Initialized successfully!');
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+

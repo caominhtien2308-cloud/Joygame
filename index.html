@@ -17,7 +17,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2.2" />
 </head>
 
 <body>
@@ -211,12 +211,11 @@
             <div class="banner-left-dish">
               <div class="banner-dish-glow"></div>
               <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80"
-                alt="Bữa ăn dinh dưỡng" class="banner-dish-img" id="banner-dish-img" />
+                alt="Bữa ăn dinh dưỡng" class="banner-dish-img" id="banner-dish-img" onerror="this.onerror=null; this.src='favicon.jpg';" />
             </div>
 
             <div class="banner-center-info">
               <h1 class="banner-title">Thực đơn 7 ngày</h1>
-              <p class="banner-subtitle">Thanh lọc cơ thể – Giữ dáng khỏe</p>
 
               <div class="banner-badges-row">
                 <span class="banner-badge" id="badge-gender-age">👤 Nữ 22 tuổi</span>
@@ -227,11 +226,28 @@
               </div>
             </div>
 
-            <div class="banner-right-decor">
-              <div class="calligraphy-quote">
-                Ăn ngon – Sống khỏe<br />Dáng xinh <span class="calligraphy-heart">♡</span>
+            <!-- Đồng hồ kim tròn chạy theo giờ thiết bị & Gợi ý món tương tác -->
+            <div class="banner-clock-card" id="banner-clock-widget" title="Bấm vào đồng hồ để xem món ăn theo khung giờ & thứ hôm nay!">
+              <div class="analog-clock" id="analog-clock">
+                <div class="clock-face">
+                  <div class="clock-tick tick-12"></div>
+                  <div class="clock-tick tick-3"></div>
+                  <div class="clock-tick tick-6"></div>
+                  <div class="clock-tick tick-9"></div>
+                  <div class="clock-hand hand-hour" id="clock-hand-hour"></div>
+                  <div class="clock-hand hand-minute" id="clock-hand-minute"></div>
+                  <div class="clock-hand hand-second" id="clock-hand-second"></div>
+                  <div class="clock-center-pin"></div>
+                </div>
               </div>
-              <div class="banner-leaf-decor">🌿</div>
+              <div class="clock-info-wrap">
+                <div class="clock-period-badge" id="clock-period-badge">
+                  <span class="clock-pulse-dot"></span>
+                  <span id="clock-period-text">Khung giờ sáng</span>
+                </div>
+                <div class="clock-digital-time" id="clock-digital-time">--:--:--</div>
+                <div class="clock-action-hint">👉 Chạm xem món ăn</div>
+              </div>
             </div>
           </div>
 
@@ -634,8 +650,8 @@
 
         <!-- Big Hero Dish Image -->
         <div class="detail-hero-wrap">
-          <img src="" alt="Món ăn chi tiết" id="detail-dish-img" class="detail-hero-img" />
-          <span class="detail-category-badge" id="detail-category-badge">Bữa trưa</span>
+          <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" alt="Món ăn chi tiết" id="detail-dish-img" class="detail-hero-img" onerror="this.onerror=null; this.src='favicon.jpg';" />
+          <span class="detail-category-badge" id="detail-category-badge">Bữa tối</span>
           <span class="detail-calories-badge" id="detail-calories-badge">~ 280 kcal</span>
         </div>
 
@@ -824,7 +840,7 @@
   </div>
 
   <!-- JavaScript logic -->
-  <script src="script.js"></script>
+  <script src="script.js?v=2.2"></script>
 </body>
 
 </html>
