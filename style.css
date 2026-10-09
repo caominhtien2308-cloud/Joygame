@@ -523,7 +523,7 @@ img {
   background: linear-gradient(135deg, var(--pastel-green) 0%, var(--cream-yellow) 100%);
   border-radius: var(--radius-lg);
   border: 1px solid #DCE6CE;
-  padding: 22px 28px;
+  padding: 18px 24px;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
@@ -531,21 +531,35 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
 }
 
-.banner-left-dish {
+.banner-center-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-center-content-flex {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.banner-dish-wrap {
   flex-shrink: 0;
   position: relative;
 }
 
 .banner-dish-img {
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--pure-white);
-  box-shadow: 0 6px 16px rgba(52, 74, 56, 0.15);
+  border: 3.5px solid var(--pure-white);
+  box-shadow: 0 4px 14px rgba(52, 74, 56, 0.15);
   background: #E8ECE2;
 }
 
@@ -557,39 +571,38 @@ img {
   z-index: -1;
 }
 
-.banner-center-info {
-  flex: 1;
+.banner-text-wrap {
   min-width: 0;
 }
 
 .banner-title {
-  font-size: 1.85rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: var(--primary-green);
   font-family: var(--font-accent);
   line-height: 1.2;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .banner-badges-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .banner-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.85);
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(4px);
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-primary);
   border: 1px solid rgba(228, 233, 216, 0.8);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 
 .banner-badge.budget-badge {
@@ -597,6 +610,107 @@ img {
   color: var(--primary-green);
   font-weight: 700;
   border-color: #BBD6AB;
+}
+
+/* ===================================================================
+   BROWN PARCHMENT SCROLL WIDGET (SÁT BÊN TAY PHẢI)
+   =================================================================== */
+.banner-scroll-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 253, 248, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid #E5CCA3;
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
+  box-shadow: 0 4px 16px rgba(162, 114, 56, 0.10);
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.banner-scroll-card:hover {
+  transform: translateY(-2px);
+  background: #FFFDF8;
+  border-color: #B88544;
+  box-shadow: 0 6px 20px rgba(162, 114, 56, 0.18);
+}
+
+.banner-scroll-card:active {
+  transform: scale(0.98);
+}
+
+.ancient-scroll-icon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.banner-scroll-card:hover .ancient-scroll-icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.scroll-glow-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(230, 180, 110, 0.4) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.banner-scroll-card:hover .scroll-glow-ring {
+  opacity: 1;
+}
+
+.scroll-info-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scroll-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #8C5824;
+  background: #F8ECD7;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.scroll-pulse-star {
+  display: inline-block;
+  animation: pulseStar 1.5s infinite;
+}
+
+@keyframes pulseStar {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.scroll-title-text {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #693E15;
+  letter-spacing: -0.2px;
+}
+
+.scroll-action-hint {
+  font-size: 0.73rem;
+  color: #A37038;
+  font-weight: 600;
 }
 
 /* ===================================================================
@@ -2986,4 +3100,484 @@ body.no-scroll-mobile {
     font-size: 0.82rem;
   }
 }
+
+/* ===================================================================
+   MODAL 1: THÔNG ĐIỆP HÔM NAY (VINTAGE BROWN PARCHMENT SCROLL)
+   =================================================================== */
+.scroll-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.scroll-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(43, 27, 10, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fadeIn 0.3s ease;
+}
+
+.scroll-parchment-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  width: 100%;
+  animation: unrollParchment 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes unrollParchment {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.parchment-roller {
+  width: 94%;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.parchment-roller-top {
+  margin-bottom: -6px;
+}
+
+.parchment-roller-bottom {
+  margin-top: -6px;
+}
+
+.roller-bar {
+  flex: 1;
+  height: 12px;
+  background: linear-gradient(180deg, #A76B2C 0%, #683F15 50%, #4D2D0C 100%);
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+.roller-cap {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #E1B268 0%, #8C5217 70%, #4E2C0A 100%);
+  border: 1.5px solid #F8D99B;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.35);
+}
+
+.parchment-body {
+  position: relative;
+  width: 100%;
+  background: #FDF4E3;
+  background-image: 
+    radial-gradient(#E8D5B5 1px, transparent 1px),
+    linear-gradient(180deg, #FFF9ED 0%, #F8E8CD 50%, #F1DEC0 100%);
+  background-size: 16px 16px, 100% 100%;
+  border: 2px solid #8C5824;
+  border-radius: 8px;
+  padding: 28px 30px;
+  box-shadow: 0 16px 40px rgba(58, 36, 12, 0.35), inset 0 0 40px rgba(184, 137, 77, 0.25);
+  text-align: center;
+}
+
+.btn-close-parchment {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #B7854F;
+  background: #F4E3C7;
+  color: #6C4016;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-close-parchment:hover {
+  background: #E5CBA7;
+  transform: scale(1.1);
+  color: #4A2707;
+}
+
+.parchment-header {
+  margin-bottom: 8px;
+}
+
+.parchment-seal {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 4px rgba(110, 68, 22, 0.2));
+}
+
+.parchment-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #925C22;
+  background: rgba(226, 192, 145, 0.45);
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+  border: 1px dashed #B8894D;
+}
+
+.parchment-title {
+  font-family: var(--font-accent);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #5C340E;
+}
+
+.parchment-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #B58449;
+  font-size: 0.85rem;
+  margin: 12px 0;
+  opacity: 0.8;
+}
+
+.parchment-quote-box {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1.5px dashed #C99E66;
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  margin: 14px 0;
+  position: relative;
+}
+
+.parchment-quote-text {
+  font-size: 1.12rem;
+  line-height: 1.68;
+  font-weight: 700;
+  color: #492807;
+  font-family: 'Comfortaa', var(--font-main);
+  letter-spacing: -0.2px;
+}
+
+.parchment-note {
+  font-size: 0.8rem;
+  color: #8C5C26;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.btn-parchment-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #7A4B1A 0%, #4D2D0C 100%);
+  color: #FFF3DB;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 11px 26px;
+  border-radius: 30px;
+  border: 1.5px solid #F0C988;
+  box-shadow: 0 4px 14px rgba(77, 45, 12, 0.35);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-parchment-confirm:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #8E5821 0%, #5B350F 100%);
+  box-shadow: 0 6px 18px rgba(77, 45, 12, 0.45);
+}
+
+/* ===================================================================
+   MODAL 2: TỜ GIẤY TÂM TÌNH ĐÊM KHUYA (10h01 tối - 4h59 sáng)
+   =================================================================== */
+.late-night-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.late-night-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 16, 30, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.35s ease;
+}
+
+.late-night-container {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  width: 100%;
+  animation: unrollParchment 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.night-sky-decor {
+  position: absolute;
+  top: -36px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.6rem;
+  color: #FEE180;
+  filter: drop-shadow(0 0 10px rgba(254, 225, 128, 0.6));
+  pointer-events: none;
+}
+
+.washi-tape-strip {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 140px;
+  height: 28px;
+  background: rgba(255, 230, 180, 0.6);
+  border: 1px dashed rgba(200, 160, 100, 0.5);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 3;
+}
+
+.late-night-paper-card {
+  position: relative;
+  background: #FFFBF0;
+  background-image: 
+    linear-gradient(#F4EDE0 1px, transparent 1px),
+    linear-gradient(90deg, #F4EDE0 1px, transparent 1px);
+  background-size: 24px 24px;
+  border-radius: 14px;
+  border: 2px solid #E2D3B8;
+  padding: 32px 30px 26px 30px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(254, 215, 102, 0.15);
+  transform: rotate(-0.5deg);
+}
+
+.btn-close-late-night {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #D6C2A0;
+  background: #F8EED9;
+  color: #715531;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-close-late-night:hover {
+  background: #EED7B5;
+  transform: scale(1.1);
+}
+
+.night-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed #DEC8A5;
+}
+
+.night-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1E293B;
+  color: #FCD34D;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #475569;
+}
+
+.night-clock {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1E293B;
+  font-family: monospace;
+}
+
+.night-message-content {
+  color: #2D1B06;
+  font-weight: 600;
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.45rem;
+  line-height: 1.75;
+  letter-spacing: 0.3px;
+  background: rgba(255, 248, 230, 0.7);
+  padding: 16px 20px;
+  border-radius: 10px;
+  border-left: 4px solid #D97706;
+  margin-bottom: 18px;
+}
+
+.night-illustration-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.night-food-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #FFF3D6;
+  border: 1px solid #ECD4A4;
+  padding: 8px 14px;
+  border-radius: 12px;
+}
+
+.night-food-item .food-emoji {
+  font-size: 1.6rem;
+}
+
+.night-food-item .food-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #78350F;
+}
+
+.fireworks-countdown-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1E1B4B 0%, #311042 100%);
+  color: #FDE047;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: 1px solid #6366F1;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+  margin-bottom: 18px;
+  animation: pulseCountdown 1s infinite alternate;
+}
+
+@keyframes pulseCountdown {
+  0% { transform: scale(0.99); }
+  100% { transform: scale(1.02); }
+}
+
+.fireworks-countdown-box strong {
+  font-size: 1.05rem;
+  color: #FF6B8B;
+}
+
+.night-card-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-night-sleep {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #334155 0%, #0F172A 100%);
+  color: #F8FAFC;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 11px 26px;
+  border-radius: 25px;
+  border: 1px solid #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-night-sleep:hover {
+  background: linear-gradient(135deg, #475569 0%, #1E293B 100%);
+  transform: translateY(-2px);
+}
+
+/* Canvas Pháo Hoa toàn màn hình */
+#fireworks-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10005;
+  pointer-events: none;
+  display: none;
+}
+
+/* Responsive Banner on Tablet and Phone */
+@media (max-width: 992px) {
+  .hero-banner {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .banner-center-info {
+    order: 1;
+    width: 100%;
+  }
+
+  .banner-center-content-flex {
+    justify-content: center;
+  }
+
+  .banner-clock-card {
+    order: 2;
+  }
+
+  .banner-scroll-card {
+    order: 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .banner-center-content-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .banner-badges-row {
+    justify-content: center;
+  }
+
+  .banner-clock-card,
+  .banner-scroll-card {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 

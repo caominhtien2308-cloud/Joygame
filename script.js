@@ -2139,35 +2139,333 @@ function updateClock() {
   }
 }
 
+// -------------------------------------------------------------------
+// 5C. HỆ THỐNG THÔNG ĐIỆP HÀNG NGÀY & TÂM TÌNH ĐÊM KHUYA
+// -------------------------------------------------------------------
+
+const DAILY_MESSAGES = [
+  { id: 1, title: 'Thông điệp 1', text: 'Cố gắng lên, đừng vì 60 phút lười theo chế độ mà chịu 60 phút trong phòng mổ sau này' },
+  { id: 2, title: 'Thông điệp 2', text: 'Mọi sự cố gắng dù ít hay nhiều đều đem lại kết quả tốt hơn hôm nay' },
+  { id: 3, title: 'Thông điệp 3', text: 'Trong lúc bạn buông thả bản thân vì không ăn nổi thì đang có người khác hối hận vì sao ngày trước không chịu ăn thế này' },
+  { id: 4, title: 'Thông điệp 4', text: 'Chưa thấy sự thay đổi hả? Ráng lên, một chút nữa thôi, thành công đâu phải ngày 1 ngày 2 đúng chứ, cố lên' },
+  { id: 5, title: 'Thông điệp 5', text: 'Nay vui hay buồn? Thôi, làm tí ức gà đi hen' },
+  { id: 6, title: 'Thông điệp 6', text: 'Ăn nhiều trái cây rau củ quả vào nhé, đẹp da lắm' },
+  { id: 7, title: 'Thông điệp 7', text: 'Ngày mới vui vẻ nhen, bạn đang làm tốt lắm, cứ tiếp tục thế nhé' },
+  { id: 8, title: 'Thông điệp 8', text: 'Đừng khóc nha, lâu lâu có thể buông thả 1 tí nhưng chỉ 1 ngày thôi nhé' },
+  { id: 9, title: 'Thông điệp 9', text: 'Huhuhuhu, ăn ức gà đê' },
+  { id: 10, title: 'Thông điệp 10', text: 'Bạn đã thành công tới đâu rồi? Mình thật sự muốn thấy bạn cười vì hạnh phúc đấy' }
+];
+
+const STORAGE_KEY_DAILY_MESSAGE = 'ankhoedangdep_daily_message_record';
+
 /**
- * Xử lý khi nhấn vào đồng hồ: hiện món ăn ứng với buổi đó và thứ đó
+ * Lấy thông điệp của ngày hôm nay:
+ * - Mỗi ngày random 1 lần, giữ nguyên trong ngày cho dù tắt mở lại
+ * - Qua 00:00 ngày mới sẽ tự động random thông điệp mới
+ * - Chắc chắn khác với 2 ngày gần nhất
+ */
+function getTodayDailyMessage() {
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  let record = null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_DAILY_MESSAGE);
+    if (raw) record = JSON.parse(raw);
+  } catch (e) {
+    console.warn('Lỗi đọc daily message:', e);
+  }
+
+  // Nếu cùng ngày và đã có messageId -> giữ nguyên thông điệp đó
+  if (record && record.date === todayStr && record.messageId) {
+    const found = DAILY_MESSAGES.find(m => m.id === record.messageId);
+    if (found) return found;
+  }
+
+  // Sang ngày mới hoặc lần đầu mở web:
+  // Lịch sử tối đa 2 ngày gần nhất cần loại trừ
+  let recentHistory = [];
+  if (record && record.messageId) {
+    const prevHistory = Array.isArray(record.history) ? record.history : [];
+    recentHistory = [record.messageId];
+    for (const id of prevHistory) {
+      if (!recentHistory.includes(id) && recentHistory.length < 2) {
+        recentHistory.push(id);
+      }
+    }
+  }
+
+  // Lọc ra danh sách thông điệp không nằm trong 2 ngày gần nhất
+  const candidates = DAILY_MESSAGES.filter(m => !recentHistory.includes(m.id));
+  const pool = candidates.length > 0 ? candidates : DAILY_MESSAGES;
+  const chosen = pool[Math.floor(Math.random() * pool.length)];
+
+  // Lưu bản ghi vào localStorage
+  const newRecord = {
+    date: todayStr,
+    messageId: chosen.id,
+    history: recentHistory
+  };
+
+  try {
+    localStorage.setItem(STORAGE_KEY_DAILY_MESSAGE, JSON.stringify(newRecord));
+  } catch (e) {
+    console.warn('Lỗi lưu daily message:', e);
+  }
+
+  return chosen;
+}
+
+function openDailyMessageModal() {
+  const msg = getTodayDailyMessage();
+  const modal = document.getElementById('modal-daily-message');
+  const titleEl = document.getElementById('daily-message-title');
+  const textEl = document.getElementById('daily-message-text');
+
+  if (titleEl) titleEl.textContent = msg.title;
+  if (textEl) textEl.textContent = msg.text;
+
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function closeDailyMessageModal() {
+  const modal = document.getElementById('modal-daily-message');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// -------------------------------------------------------------------
+// 5D. TỜ GIẤY TÂM TÌNH ĐÊM KHUYA & PHÁO HOA NỔ
+// -------------------------------------------------------------------
+
+let lateNightCountdownInterval = null;
+let lateNightFireworksTimeout = null;
+
+function openLateNightNoteModal() {
+  const modal = document.getElementById('modal-late-night-note');
+  const timeDisplay = document.getElementById('late-night-clock-display');
+  const secondsLeftEl = document.getElementById('fireworks-seconds-left');
+
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  if (timeDisplay) {
+    timeDisplay.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  }
+
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+
+  // Bắt đầu đếm ngược 10 giây
+  let secondsLeft = 10;
+  if (secondsLeftEl) secondsLeftEl.textContent = `${secondsLeft}s`;
+
+  if (lateNightCountdownInterval) clearInterval(lateNightCountdownInterval);
+  if (lateNightFireworksTimeout) clearTimeout(lateNightFireworksTimeout);
+
+  lateNightCountdownInterval = setInterval(() => {
+    secondsLeft--;
+    if (secondsLeftEl) {
+      if (secondsLeft > 0) {
+        secondsLeftEl.textContent = `${secondsLeft}s`;
+      } else {
+        secondsLeftEl.textContent = 'ĐANG NỔ! 🎆';
+      }
+    }
+    if (secondsLeft <= 0) {
+      clearInterval(lateNightCountdownInterval);
+      lateNightCountdownInterval = null;
+    }
+  }, 1000);
+
+  // Đúng sau khi tờ giấy hiện ra được 10 giây -> Kích hoạt pháo hoa
+  lateNightFireworksTimeout = setTimeout(() => {
+    launchLateNightFireworks();
+  }, 10000);
+}
+
+function closeLateNightNoteModal() {
+  const modal = document.getElementById('modal-late-night-note');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  if (lateNightCountdownInterval) {
+    clearInterval(lateNightCountdownInterval);
+    lateNightCountdownInterval = null;
+  }
+}
+
+/**
+ * Pháo hoa nổ xung quanh màn hình:
+ * - Tầm 10 quả pháo hoa nổ
+ * - Thời gian nổ kéo dài trong 3s
+ * - Mỗi pháo hoa có các màu: đỏ, vàng, cam, hồng, xanh naivi
+ */
+function launchLateNightFireworks() {
+  const canvas = document.getElementById('fireworks-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+
+  // 5 màu chuẩn: đỏ, vàng, cam, hồng, xanh naivi (navy blue)
+  const FIREWORK_COLORS = [
+    '#FF2E4C', // đỏ
+    '#FFD200', // vàng
+    '#FF7E00', // cam
+    '#FF3B94', // hồng
+    '#0A2540'  // xanh naivi
+  ];
+
+  const particles = [];
+  const fireworksCount = 10;
+  const durationMs = 3000;
+  const startTime = Date.now();
+
+  // Tạo 10 điểm nổ pháo hoa rải rác xung quanh màn hình trong 3s
+  const fireworkSites = [];
+  for (let i = 0; i < fireworksCount; i++) {
+    const delay = (i / fireworksCount) * 1900 + Math.random() * 150;
+    let x, y;
+    const sector = i % 5;
+    if (sector === 0) {
+      // Góc trên trái
+      x = window.innerWidth * (0.12 + Math.random() * 0.18);
+      y = window.innerHeight * (0.15 + Math.random() * 0.22);
+    } else if (sector === 1) {
+      // Góc trên phải
+      x = window.innerWidth * (0.70 + Math.random() * 0.18);
+      y = window.innerHeight * (0.15 + Math.random() * 0.22);
+    } else if (sector === 2) {
+      // Mép trái
+      x = window.innerWidth * (0.08 + Math.random() * 0.16);
+      y = window.innerHeight * (0.42 + Math.random() * 0.32);
+    } else if (sector === 3) {
+      // Mép phải
+      x = window.innerWidth * (0.76 + Math.random() * 0.16);
+      y = window.innerHeight * (0.42 + Math.random() * 0.32);
+    } else {
+      // Phía trên giữa
+      x = window.innerWidth * (0.35 + Math.random() * 0.30);
+      y = window.innerHeight * (0.12 + Math.random() * 0.18);
+    }
+    fireworkSites.push({ delay, x, y, triggered: false });
+  }
+
+  function createExplosion(x, y) {
+    const count = 55 + Math.floor(Math.random() * 15);
+    for (let p = 0; p < count; p++) {
+      const angle = (p / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.25;
+      const speed = 2.2 + Math.random() * 5.8;
+      const color = FIREWORK_COLORS[p % FIREWORK_COLORS.length];
+      particles.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        alpha: 1,
+        decay: 0.016 + Math.random() * 0.018,
+        color,
+        size: 3 + Math.random() * 2.5,
+        gravity: 0.085
+      });
+    }
+  }
+
+  let animFrameId = null;
+
+  function renderFireworks() {
+    const elapsed = Date.now() - startTime;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Kích hoạt các quả pháo hoa theo thời gian
+    fireworkSites.forEach(fw => {
+      if (!fw.triggered && elapsed >= fw.delay) {
+        fw.triggered = true;
+        createExplosion(fw.x, fw.y);
+      }
+    });
+
+    // Cập nhật và vẽ các hạt
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= 0.98;
+      p.alpha -= p.decay;
+
+      if (p.alpha <= 0) {
+        particles.splice(i, 1);
+        continue;
+      }
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color === '#0A2540' ? '#1E3A8A' : p.color;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    if (elapsed < durationMs + 1000 && (elapsed < durationMs || particles.length > 0)) {
+      animFrameId = requestAnimationFrame(renderFireworks);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.style.display = 'none';
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+    }
+  }
+
+  animFrameId = requestAnimationFrame(renderFireworks);
+}
+
+/**
+ * Xử lý khi nhấn vào đồng hồ:
+ * - Trong khung giờ 10h01 tối (22:01) tới 4h59 sáng: Hiện tờ giấy tâm tình đêm khuya & pháo hoa
+ * - Trong các khung giờ còn lại (5h00 - 22h00): Hiện món ăn ứng với buổi đó và thứ đó
  */
 function handleClockWidgetClick() {
   const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const totalMinutes = hours * 60 + minutes;
+
+  // 1. Kiểm tra khung giờ từ 10h01 tối (22:01) tới 4h59 sáng (04:59)
+  const isLateNight = (totalMinutes >= 22 * 60 + 1) || (totalMinutes <= 4 * 60 + 59);
+  if (isLateNight) {
+    openLateNightNoteModal();
+    return;
+  }
+
+  // 2. Ngoài khung giờ đêm khuya: Chuyển đến món ăn theo khung giờ & thứ hôm nay
   const periodInfo = getCurrentTimePeriodInfo(now);
   const currentDayId = getCurrentDayId(now);
   const currentDayConfig = DAYS_CONFIG.find(d => d.id === currentDayId);
   const dayName = currentDayConfig ? currentDayConfig.name : 'Hôm nay';
 
-  // 1. Chuyển sang Thực đơn 7 ngày nếu đang ở trang khác
   if (state.currentView !== 'menu7d') {
     switchView('menu7d');
   }
 
-  // 2. Chọn thứ tương ứng
   state.selectedDay = currentDayId;
-  state.mealFilter = 'all'; // Đặt lại bộ lọc để chắc chắn món hiển thị
+  state.mealFilter = 'all';
   updateFilterButtons();
   renderMealPlan();
 
-  // 3. Tìm món ăn đúng buổi và thứ đó
   const targetMeal = state.meals.find(m => m.day === currentDayId && m.mealType === periodInfo.mealType);
 
   if (targetMeal) {
-    // Hiển thị chi tiết món ăn ở Panel bên phải
     selectDish(targetMeal.id);
 
-    // Cuộn mượt đến thẻ món ăn đó trong danh sách và tạo hiệu ứng phát sáng nhẹ
     setTimeout(() => {
       const card = document.querySelector(`.meal-slot-fav-btn[data-id="${targetMeal.id}"]`)?.closest('.meal-slot-card');
       if (card) {
@@ -2178,13 +2476,8 @@ function handleClockWidgetClick() {
     }, 120);
 
     const pad = n => String(n).padStart(2, '0');
-    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-
-    if (periodInfo.isLateNight) {
-      showToast(`✨ [${timeStr}] Bây giờ là giờ nghỉ ngơi! Đã mở thực đơn Bữa sáng ${dayName} cho bạn.`, 'success');
-    } else {
-      showToast(`⏰ [${timeStr}] ${periodInfo.periodName} (${dayName})! Đã mở món: "${targetMeal.name.slice(0, 32)}..."`, 'success');
-    }
+    const timeStr = `${pad(hours)}:${pad(minutes)}`;
+    showToast(`⏰ [${timeStr}] ${periodInfo.periodName} (${dayName})! Đã mở món: "${targetMeal.name.slice(0, 32)}..."`, 'success');
   } else {
     showToast(`Đã chuyển đến thực đơn ${dayName}!`, 'success');
   }
@@ -2212,11 +2505,32 @@ function initEventHandlers() {
     showToast('Chào bạn! Cùng khám phá bí quyết giữ dáng và sống khỏe mỗi ngày nhé!', 'success');
   });
 
-  // 2B. Analog Clock Widget click listener (gợi ý món ăn theo giờ thiết bị)
+  // 2B. Analog Clock Widget click listener
   const clockWidget = document.getElementById('banner-clock-widget');
   if (clockWidget) {
     clockWidget.addEventListener('click', handleClockWidgetClick);
   }
+
+  // 2C. Brown Parchment Scroll Widget click listener (Thông Điệp)
+  const scrollWidget = document.getElementById('banner-scroll-widget');
+  if (scrollWidget) {
+    scrollWidget.addEventListener('click', openDailyMessageModal);
+  }
+
+  const closeMessageBtn = document.getElementById('btn-close-daily-message');
+  const messageBackdrop = document.getElementById('daily-message-backdrop');
+  const acknowledgeMessageBtn = document.getElementById('btn-acknowledge-message');
+  if (closeMessageBtn) closeMessageBtn.addEventListener('click', closeDailyMessageModal);
+  if (messageBackdrop) messageBackdrop.addEventListener('click', closeDailyMessageModal);
+  if (acknowledgeMessageBtn) acknowledgeMessageBtn.addEventListener('click', closeDailyMessageModal);
+
+  // 2D. Late Night Note Modal listeners
+  const closeLateNightBtn = document.getElementById('btn-close-late-night');
+  const lateNightBackdrop = document.getElementById('late-night-backdrop');
+  const nightSleepBtn = document.getElementById('btn-night-sleep');
+  if (closeLateNightBtn) closeLateNightBtn.addEventListener('click', closeLateNightNoteModal);
+  if (lateNightBackdrop) lateNightBackdrop.addEventListener('click', closeLateNightNoteModal);
+  if (nightSleepBtn) nightSleepBtn.addEventListener('click', closeLateNightNoteModal);
 
   // 3. Day tabs selection
   document.querySelectorAll('.day-tab-btn').forEach(btn => {

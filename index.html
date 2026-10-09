@@ -17,7 +17,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=2.3" />
+  <link rel="stylesheet" href="style.css?v=2.4" />
 </head>
 
 <body>
@@ -208,25 +208,7 @@
 
           <!-- Hero Banner -->
           <div class="hero-banner">
-            <div class="banner-left-dish">
-              <div class="banner-dish-glow"></div>
-              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80"
-                alt="Bữa ăn dinh dưỡng" class="banner-dish-img" id="banner-dish-img" onerror="this.onerror=null; this.src='favicon.jpg';" />
-            </div>
-
-            <div class="banner-center-info">
-              <h1 class="banner-title">Thực đơn 7 ngày</h1>
-
-              <div class="banner-badges-row">
-                <span class="banner-badge" id="badge-gender-age">👤 Nữ 22 tuổi</span>
-                <span class="banner-badge" id="badge-height">📏 Cao 1m56</span>
-                <span class="banner-badge" id="badge-weight">⚖️ Nặng 50kg</span>
-                <span class="banner-badge" id="badge-activity">🏃 Ít vận động</span>
-                <span class="banner-badge budget-badge" id="badge-budget">💰 Ngân sách 70.000đ/ngày</span>
-              </div>
-            </div>
-
-            <!-- Đồng hồ kim tròn chạy theo giờ thiết bị & Gợi ý món tương tác -->
+            <!-- 1. SÁT BÊN TAY TRÁI: Đồng hồ kim tròn chạy theo giờ thiết bị -->
             <div class="banner-clock-card" id="banner-clock-widget" title="Bấm vào đồng hồ để xem món ăn theo khung giờ & thứ hôm nay!">
               <div class="analog-clock" id="analog-clock">
                 <div class="clock-face">
@@ -247,6 +229,52 @@
                 </div>
                 <div class="clock-digital-time" id="clock-digital-time">--:--:--</div>
                 <div class="clock-action-hint">👉 Chạm xem món ăn</div>
+              </div>
+            </div>
+
+            <!-- 2. Ở GIỮA: Thông tin Thực đơn 7 ngày & Đĩa ăn dinh dưỡng -->
+            <div class="banner-center-info">
+              <div class="banner-center-content-flex">
+                <div class="banner-dish-wrap">
+                  <div class="banner-dish-glow"></div>
+                  <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80"
+                    alt="Bữa ăn dinh dưỡng" class="banner-dish-img" id="banner-dish-img" onerror="this.onerror=null; this.src='favicon.jpg';" />
+                </div>
+                <div class="banner-text-wrap">
+                  <h1 class="banner-title">Thực đơn 7 ngày</h1>
+                  <div class="banner-badges-row">
+                    <span class="banner-badge" id="badge-gender-age">👤 Nữ 22 tuổi</span>
+                    <span class="banner-badge" id="badge-height">📏 Cao 1m56</span>
+                    <span class="banner-badge" id="badge-weight">⚖️ Nặng 50kg</span>
+                    <span class="banner-badge" id="badge-activity">🏃 Ít vận động</span>
+                    <span class="banner-badge budget-badge" id="badge-budget">💰 Ngân sách 70.000đ/ngày</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. SÁT BÊN TAY PHẢI: Biểu tượng cuộn giấy nâu Thông Điệp -->
+            <div class="banner-scroll-card" id="banner-scroll-widget" title="Chạm để mở Thông Điệp hôm nay!">
+              <div class="scroll-widget-icon-box">
+                <div class="ancient-scroll-icon">
+                  <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="12" y="8" width="24" height="32" rx="4" fill="#E6C898" stroke="#85521E" stroke-width="2.5"/>
+                    <path d="M8 12C8 9.79086 9.79086 8 12 8H36C38.2091 8 40 9.79086 40 12C40 14.2091 38.2091 16 36 16H12C9.79086 16 8 14.2091 8 12Z" fill="#C99859" stroke="#754314" stroke-width="2.5"/>
+                    <path d="M8 36C8 33.7909 9.79086 32 12 32H36C38.2091 32 40 33.7909 40 36C40 38.2091 38.2091 40 36 40H12C9.79086 40 8 38.2091 8 36Z" fill="#B38042" stroke="#754314" stroke-width="2.5"/>
+                    <line x1="16" y1="21" x2="32" y2="21" stroke="#85521E" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="16" y1="27" x2="28" y2="27" stroke="#85521E" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="33" cy="24" r="3.5" fill="#C53030" stroke="#742A2A" stroke-width="1.5"/>
+                  </svg>
+                  <span class="scroll-glow-ring"></span>
+                </div>
+              </div>
+              <div class="scroll-info-wrap">
+                <div class="scroll-badge">
+                  <span class="scroll-pulse-star">✨</span>
+                  <span>Mỗi ngày 1 điều hay</span>
+                </div>
+                <div class="scroll-title-text">Thông Điệp</div>
+                <div class="scroll-action-hint">📜 Chạm mở xem</div>
               </div>
             </div>
           </div>
@@ -837,10 +865,109 @@
       </div>
     </div>
 
+    <!-- ==============================================================
+         MODAL 1: THÔNG ĐIỆP HÔM NAY (Cuộn giấy nâu)
+         ============================================================== -->
+    <div class="scroll-modal-overlay" id="modal-daily-message" style="display: none;">
+      <div class="scroll-modal-backdrop" id="daily-message-backdrop"></div>
+      <div class="scroll-parchment-wrapper">
+        <div class="parchment-roller parchment-roller-top">
+          <div class="roller-cap cap-left"></div>
+          <div class="roller-bar"></div>
+          <div class="roller-cap cap-right"></div>
+        </div>
+        <div class="parchment-body">
+          <button type="button" class="btn-close-parchment" id="btn-close-daily-message" title="Đóng">✕</button>
+          <div class="parchment-header">
+            <div class="parchment-seal">📜</div>
+            <div class="parchment-badge" id="daily-message-badge">LỜI KHUYÊN DÀNH CHO BẠN</div>
+            <h3 class="parchment-title" id="daily-message-title">Thông Điệp Hôm Nay</h3>
+          </div>
+          <div class="parchment-divider">
+            <span>✧</span><span>✦</span><span>✧</span>
+          </div>
+          <div class="parchment-quote-box">
+            <p class="parchment-quote-text" id="daily-message-text">
+              <!-- Nội dung thông điệp -->
+            </p>
+          </div>
+          <div class="parchment-divider">
+            <span>✧</span><span>✦</span><span>✧</span>
+          </div>
+          <div class="parchment-footer">
+            <div class="parchment-note">
+              🌱 Mỗi ngày một thông điệp đồng hành cùng bạn (tự động đổi lúc 00:00 ngày mai).
+            </div>
+            <button type="button" class="btn-parchment-confirm" id="btn-acknowledge-message">
+              <span>💪</span> Đã ghi nhớ & Cố lên!
+            </button>
+          </div>
+        </div>
+        <div class="parchment-roller parchment-roller-bottom">
+          <div class="roller-cap cap-left"></div>
+          <div class="roller-bar"></div>
+          <div class="roller-cap cap-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         MODAL 2: TỜ GIẤY TÂM TÌNH ĐÊM KHUYA (10h01 tối - 4h59 sáng)
+         ============================================================== -->
+    <div class="late-night-modal-overlay" id="modal-late-night-note" style="display: none;">
+      <div class="late-night-backdrop" id="late-night-backdrop"></div>
+      <div class="late-night-container">
+        <div class="night-sky-decor">
+          <span class="moon-icon">🌙</span>
+          <span class="star-icon star-1">✨</span>
+          <span class="star-icon star-2">✦</span>
+          <span class="star-icon star-3">⭐</span>
+        </div>
+        <div class="washi-tape-strip"></div>
+        <div class="late-night-paper-card">
+          <button type="button" class="btn-close-late-night" id="btn-close-late-night" title="Đóng">✕</button>
+          <div class="night-card-header">
+            <span class="night-badge">🌙 Đêm khuya thanh vắng</span>
+            <span class="night-clock" id="late-night-clock-display">01:40</span>
+          </div>
+          <div class="night-message-content" id="late-night-message-content">
+            " Sao giờ này rồi còn bấm vào đây? Chưa ăn hay gì? Công việc mệt mỏi hay là cuộc sống stress quá hả? Thôi khuya rồi, uống ly sữa luộc 4 quả trứng mà ăn. Chuyện gì rồi cũng sẽ qua thôi. Ăn rồi tranh thủ ngủ đi nhen, đừng buồn nữa. Ngủ ngon nhennn"
+          </div>
+          <div class="night-illustration-row">
+            <div class="night-food-item">
+              <span class="food-emoji">🥛</span>
+              <span class="food-label">Ly sữa ấm</span>
+            </div>
+            <div class="night-food-item">
+              <span class="food-emoji">🥚🥚🥚🥚</span>
+              <span class="food-label">4 quả trứng</span>
+            </div>
+            <div class="night-food-item">
+              <span class="food-emoji">💤</span>
+              <span class="food-label">Ngủ ngon nhé</span>
+            </div>
+          </div>
+          <div class="fireworks-countdown-box" id="fireworks-countdown-box">
+            <span class="fireworks-icon">🎆</span>
+            <span>Món quà pháo hoa ấm áp sẽ nổ sau: </span>
+            <strong id="fireworks-seconds-left">10s</strong>
+          </div>
+          <div class="night-card-footer">
+            <button type="button" class="btn-night-sleep" id="btn-night-sleep">
+              <span>😴</span> Dạ, mình đi ngủ đây
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas Pháo Hoa toàn màn hình -->
+    <canvas id="fireworks-canvas"></canvas>
+
   </div>
 
   <!-- JavaScript logic -->
-  <script src="script.js?v=2.3"></script>
+  <script src="script.js?v=2.4"></script>
 </body>
 
 </html>
