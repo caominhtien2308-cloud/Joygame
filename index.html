@@ -4,246 +4,825 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tiến Và Cuộc Phiêu Lưu 3 Cõi</title>
-  <meta name="description" content="Game giải đố phiêu lưu đánh quái - Tiến Và Cuộc Phiêu Lưu 3 Cõi" />
+  <title>Ăn Khỏe Dáng Đẹp - Thực Đơn Dinh Dưỡng 7 Ngày</title>
+  <meta name="description"
+    content="Website quản lý thực đơn dinh dưỡng 7 ngày Ăn Khỏe Dáng Đẹp - Lên kế hoạch ăn uống healthy, tính toán chi phí và nguyên liệu chi tiết cho vóc dáng thon gọn." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- ===== PARTICLE CONTAINER ===== -->
-  <div id="particle-container"></div>
+  <div id="app">
 
-  <!-- ===== SCREEN: TITLE ===== -->
-  <div id="screen-title" class="screen active">
-    <div class="title-bg"></div>
-    <div class="title-content">
-      <div class="title-decoration top-deco">✦ ✦ ✦</div>
-      <h1 class="game-title">
-        <span class="title-line1">TIẾN VÀ</span>
-        <span class="title-line2">CUỘC PHIÊU LƯU</span>
-        <span class="title-line3">3 CÕI</span>
-      </h1>
-      <p class="title-subtitle">Fantasy · Adventure · Comedy</p>
-      <div class="title-decoration bot-deco">✦ ✦ ✦</div>
-      <button id="btn-start" class="btn btn-primary btn-glow" onclick="startGame()">
-        ⚔ BẮT ĐẦU ⚔
+    <!-- ==============================================================
+         1. TOP HEADER BAR
+         ============================================================== -->
+    <header class="top-header">
+      <div class="brand-section">
+        <a href="#menu7d" class="brand-logo" id="logo-link">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+            </svg>
+          </div>
+          <span class="brand-title">Ăn Khỏe Dáng Đẹp</span>
+        </a>
+        <div class="brand-tagline">
+          <span>Ăn ngon</span> • Dễ làm • Tiết kiệm • Hiệu quả
+        </div>
+      </div>
+
+      <!-- Realtime Search bar -->
+      <div class="header-search">
+        <div class="search-input-wrap">
+          <span class="search-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="text" id="global-search-input" class="search-input"
+            placeholder="Tìm món ăn, nguyên liệu (ví dụ: tôm, ức gà, trứng)..." />
+          <button id="clear-search-btn" class="search-clear-btn" title="Xóa tìm kiếm">✕</button>
+        </div>
+      </div>
+
+      <!-- Header Right CTA & Profile -->
+      <div class="header-actions">
+        <button id="btn-companion-cta" class="btn-companion" title="Đồng hành cùng bạn trên hành trình khỏe đẹp">
+          <span>🌱</span>
+          <span class="companion-text">Đồng hành cùng bạn trên hành trình khỏe đẹp</span>
+        </button>
+        <button id="btn-header-profile" class="header-user-btn" title="Hồ sơ người dùng">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==============================================================
+         2. MAIN THREE-COLUMN WORKSPACE
+         ============================================================== -->
+    <div class="main-workspace">
+
+      <!-- ------------------------------------------------------------
+           COLUMN A: LEFT NAVIGATION SIDEBAR (~220px)
+           ------------------------------------------------------------ -->
+      <aside class="left-sidebar" id="left-sidebar">
+        <nav class="sidebar-nav">
+          <a href="#home" class="nav-item" data-view="menu7d" id="nav-home">
+            <span class="nav-item-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
+            <span>Trang chủ</span>
+          </a>
+
+          <a href="#menu7d" class="nav-item active" data-view="menu7d" id="nav-menu7d">
+            <span class="nav-item-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                <line x1="16" x2="16" y1="2" y2="6"></line>
+                <line x1="8" x2="8" y1="2" y2="6"></line>
+                <line x1="3" x2="21" y1="10" y2="10"></line>
+              </svg>
+            </span>
+            <span>Thực đơn 7 ngày</span>
+          </a>
+
+          <a href="#ingredients" class="nav-item" data-view="ingredients" id="nav-ingredients">
+            <span class="nav-item-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m16 6 4 14"></path>
+                <path d="M12 6v14"></path>
+                <path d="M8 8v12"></path>
+                <path d="M4 4v16"></path>
+              </svg>
+            </span>
+            <span>Danh sách nguyên liệu</span>
+          </a>
+
+          <a href="#costs" class="nav-item" data-view="costs" id="nav-costs">
+            <span class="nav-item-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                <path d="M12 6v2m0 8v2"></path>
+              </svg>
+            </span>
+            <span>Ước tính chi phí</span>
+          </a>
+
+          <a href="#nutrition" class="nav-item" data-view="nutrition" id="nav-nutrition">
+            <span class="nav-item-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+            </span>
+            <span>Kiến thức dinh dưỡng</span>
+          </a>
+
+          <a href="#settings" class="nav-item" data-view="settings" id="nav-settings">
+            <span class="nav-item-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
+                </path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </span>
+            <span>Cài đặt</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <!-- User Profile Card -->
+          <div class="user-mini-card" id="sidebar-user-card">
+            <div class="user-card-header">
+              <span class="user-card-title">
+                <span>🌱</span> Thông tin người dùng
+              </span>
+              <button class="btn-edit-user-quick" id="btn-quick-edit-profile" title="Chỉnh sửa thông tin">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="user-stat-list">
+              <div class="user-stat-item" id="sidebar-stat-gender-age">
+                <span>👤</span> <strong id="val-gender-age">Nữ • 22 tuổi</strong>
+              </div>
+              <div class="user-stat-item" id="sidebar-stat-body">
+                <span>📏</span> <span id="val-body">Cao 1m56 • Nặng 50kg</span>
+              </div>
+              <div class="user-stat-item" id="sidebar-stat-activity">
+                <span>🏃</span> <span id="val-activity">Ít vận động</span>
+              </div>
+              <div class="user-stat-item budget-highlight" id="sidebar-stat-budget">
+                <span>💰</span> <span id="val-budget">Ngân sách: 70.000đ/ngày</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Motivational Botanical Quote Decor -->
+          <div class="sidebar-quote-decor">
+            <div class="quote-text">
+              “Ăn uống khoa học là bước đầu tiên để thay đổi vóc dáng!”
+            </div>
+            <div class="quote-decor-art">
+              🌿 🍋 💛
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ------------------------------------------------------------
+           COLUMN B: MAIN CENTER CONTENT AREA
+           ------------------------------------------------------------ -->
+      <main class="center-content" id="center-content">
+
+        <!-- VIEW 1: THỰC ĐƠN 7 NGÀY -->
+        <section id="view-menu7d" class="view-section active">
+
+          <!-- Hero Banner -->
+          <div class="hero-banner">
+            <div class="banner-left-dish">
+              <div class="banner-dish-glow"></div>
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80"
+                alt="Bữa ăn dinh dưỡng" class="banner-dish-img" id="banner-dish-img" />
+            </div>
+
+            <div class="banner-center-info">
+              <h1 class="banner-title">Thực đơn 7 ngày</h1>
+              <p class="banner-subtitle">Thanh lọc cơ thể – Giữ dáng khỏe</p>
+
+              <div class="banner-badges-row">
+                <span class="banner-badge" id="badge-gender-age">👤 Nữ 22 tuổi</span>
+                <span class="banner-badge" id="badge-height">📏 Cao 1m56</span>
+                <span class="banner-badge" id="badge-weight">⚖️ Nặng 50kg</span>
+                <span class="banner-badge" id="badge-activity">🏃 Ít vận động</span>
+                <span class="banner-badge budget-badge" id="badge-budget">💰 Ngân sách 70.000đ/ngày</span>
+              </div>
+            </div>
+
+            <div class="banner-right-decor">
+              <div class="calligraphy-quote">
+                Ăn ngon – Sống khỏe<br />Dáng xinh <span class="calligraphy-heart">♡</span>
+              </div>
+              <div class="banner-leaf-decor">🌿</div>
+            </div>
+          </div>
+
+          <!-- Day Selector Row -->
+          <div class="day-selector-container">
+            <div class="day-selector-tabs" id="day-tabs-list">
+              <button class="day-tab-btn active" data-day="thu2">Thứ 2</button>
+              <button class="day-tab-btn" data-day="thu3">Thứ 3</button>
+              <button class="day-tab-btn" data-day="thu4">Thứ 4</button>
+              <button class="day-tab-btn" data-day="thu5">Thứ 5</button>
+              <button class="day-tab-btn" data-day="thu6">Thứ 6</button>
+              <button class="day-tab-btn" data-day="thu7">Thứ 7</button>
+              <button class="day-tab-btn" data-day="chunhat">Chủ nhật</button>
+              <button class="day-tab-btn" data-day="all">Tất cả ngày</button>
+            </div>
+          </div>
+
+          <!-- Secondary Filters (Meal types & Favorites) -->
+          <div class="secondary-filter-bar">
+            <div class="meal-type-filters" id="meal-type-filters">
+              <button class="meal-filter-btn active" data-filter="all">Tất cả bữa</button>
+              <button class="meal-filter-btn" data-filter="sang">Bữa sáng</button>
+              <button class="meal-filter-btn" data-filter="trua">Bữa trưa</button>
+              <button class="meal-filter-btn" data-filter="phu">Bữa phụ</button>
+              <button class="meal-filter-btn" data-filter="toi">Bữa tối</button>
+            </div>
+
+            <div class="filter-actions-right">
+              <button id="btn-toggle-favorite-filter" class="btn-filter-favorite">
+                <span>🤍</span>
+                <span>Món yêu thích</span>
+                <span id="fav-count-badge">(0)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 7-Day Meal Plan Container (Weekly Grid as seen in reference mockup) -->
+          <div class="meal-plan-container" id="meal-plan-container">
+            <!-- Dynamically populated rows for Thu 2 -> Chu nhat -->
+          </div>
+
+        </section>
+
+        <!-- VIEW 2: DANH SÁCH NGUYÊN LIỆU (SHOPPING LIST) -->
+        <section id="view-ingredients" class="view-section">
+          <div class="shopping-stats-grid">
+            <div class="stat-metric-card">
+              <div class="metric-card-header">
+                <span>Tổng loại nguyên liệu</span>
+                <span>🧺</span>
+              </div>
+              <div class="metric-card-value" id="stat-total-ingredients">0</div>
+              <div class="metric-card-note">Cần dùng cho cả 7 ngày</div>
+            </div>
+
+            <div class="stat-metric-card">
+              <div class="metric-card-header">
+                <span>Đã chuẩn bị / Đã mua</span>
+                <span>✅</span>
+              </div>
+              <div class="metric-card-value" id="stat-bought-ingredients">0/0</div>
+              <div class="metric-card-note" id="stat-bought-percent">Tiến độ 0%</div>
+            </div>
+
+            <div class="stat-metric-card">
+              <div class="metric-card-header">
+                <span>Chi phí thực phẩm tuần</span>
+                <span>💵</span>
+              </div>
+              <div class="metric-card-value" id="stat-total-weekly-cost">0đ</div>
+              <div class="metric-card-note">Tính theo lượng dùng thực tế</div>
+            </div>
+
+            <div class="stat-metric-card">
+              <div class="metric-card-header">
+                <span>Ước tính mua gói lẻ</span>
+                <span>🛍️</span>
+              </div>
+              <div class="metric-card-value" id="stat-retail-cost">0đ</div>
+              <div class="metric-card-note">Theo quy cách siêu thị/chợ</div>
+            </div>
+          </div>
+
+          <div class="shopping-toolbar">
+            <div class="shopping-filter-tabs" id="ingredient-category-tabs">
+              <button class="shop-tab-btn active" data-cat="all">Tất cả</button>
+              <button class="shop-tab-btn" data-cat="meat">Thịt, cá, tôm</button>
+              <button class="shop-tab-btn" data-cat="dairy">Trứng & Sữa</button>
+              <button class="shop-tab-btn" data-cat="veggie">Rau củ & Quả</button>
+              <button class="shop-tab-btn" data-cat="carb">Tinh bột</button>
+              <button class="shop-tab-btn" data-cat="seasoning">Gia vị & Khác</button>
+            </div>
+
+            <div class="shopping-actions">
+              <button id="btn-check-all-ingredients" class="btn-secondary">
+                <span>☑️</span> Chọn tất cả
+              </button>
+              <button id="btn-uncheck-all-ingredients" class="btn-secondary">
+                <span>⬜</span> Bỏ chọn
+              </button>
+              <button id="btn-print-shopping-list" class="btn-primary">
+                <span>🖨️</span> In / Lưu danh sách
+              </button>
+            </div>
+          </div>
+
+          <div class="shopping-table-card">
+            <table class="shopping-table" id="shopping-table">
+              <thead>
+                <tr>
+                  <th style="width: 48px; text-align: center;">Mua</th>
+                  <th>Nguyên liệu</th>
+                  <th>Phân loại</th>
+                  <th>Lượng dùng (7 ngày)</th>
+                  <th>Lượng mua thực tế</th>
+                  <th>Đơn giá tham khảo</th>
+                  <th style="text-align: right;">Chi phí ước tính</th>
+                </tr>
+              </thead>
+              <tbody id="shopping-table-body">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 3: ƯỚC TÍNH CHI PHÍ (BUDGET & COST ANALYSIS) -->
+        <section id="view-costs" class="view-section">
+          <div class="cost-overview-card">
+            <div class="cost-header-flex">
+              <div>
+                <h2 class="cost-header-title">Phân tích chi phí & Ngân sách tuần</h2>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+                  So sánh trực quan giữa chi phí thực đơn thực tế và ngân sách mục tiêu của bạn
+                </p>
+              </div>
+              <div id="budget-status-pill" class="budget-status-pill status-ok">
+                <span>🌿</span> Trong ngân sách
+              </div>
+            </div>
+
+            <div class="budget-progress-container">
+              <div class="progress-labels">
+                <span>Tiến độ ngân sách: <strong id="progress-spent-text">0đ / 490.000đ</strong></span>
+                <span id="progress-percent-text">0%</span>
+              </div>
+              <div class="progress-track">
+                <div id="cost-progress-fill" class="progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="cost-figures-grid">
+              <div class="cost-figure-item">
+                <div class="figure-sub">Tổng chi phí 7 ngày</div>
+                <div class="figure-main" id="fig-total-cost">0đ</div>
+                <div class="figure-diff" id="fig-budget-diff">Tiết kiệm 0đ</div>
+              </div>
+
+              <div class="cost-figure-item">
+                <div class="figure-sub">Chi phí trung bình mỗi ngày</div>
+                <div class="figure-main" id="fig-daily-avg">0đ</div>
+                <div class="figure-diff" id="fig-daily-diff">So với 70.000đ/ngày</div>
+              </div>
+
+              <div class="cost-figure-item">
+                <div class="figure-sub">Ngân sách dự kiến (7 ngày)</div>
+                <div class="figure-main" id="fig-target-budget">490.000đ</div>
+                <div class="figure-diff" style="color: var(--text-muted);">Cố định: 70.000đ × 7</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Day-by-Day Cost Breakdown Table -->
+          <div class="shopping-table-card" style="margin-bottom: 24px;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary-green);">Chi tiết chi phí từng ngày trong tuần</h3>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Tự động tính từ từng bữa ăn</span>
+            </div>
+            <table class="shopping-table">
+              <thead>
+                <tr>
+                  <th>Ngày</th>
+                  <th>Bữa sáng</th>
+                  <th>Bữa trưa</th>
+                  <th>Bữa phụ</th>
+                  <th>Bữa tối</th>
+                  <th>Tổng ngày</th>
+                  <th>So với ngân sách</th>
+                  <th style="text-align: center;">Đánh giá</th>
+                </tr>
+              </thead>
+              <tbody id="daily-cost-table-body">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Ingredient Price Master Editor -->
+          <div class="price-editor-card">
+            <div class="price-editor-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-green);">Bảng đơn giá nguyên liệu thị trường</h3>
+                <p style="font-size: 0.84rem; color: var(--text-muted);">Bạn có thể chỉnh sửa đơn giá thực tế tại chợ/siêu thị nơi bạn ở. Toàn bộ thực đơn và chi phí sẽ tự động cập nhật.</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button id="btn-reset-prices" class="btn-secondary" title="Khôi phục giá chuẩn">
+                  Khôi phục gốc
+                </button>
+                <button id="btn-save-custom-prices" class="btn-primary" title="Lưu đơn giá">
+                  Lưu thay đổi giá
+                </button>
+              </div>
+            </div>
+
+            <table class="price-input-table">
+              <thead>
+                <tr>
+                  <th>Nguyên liệu</th>
+                  <th>Đơn vị tính</th>
+                  <th>Giá thị trường (VNĐ)</th>
+                  <th>Ghi chú mua sắm</th>
+                </tr>
+              </thead>
+              <tbody id="price-master-table-body">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 4: KIẾN THỨC DINH DƯỠNG (NUTRITION GUIDE) -->
+        <section id="view-nutrition" class="view-section">
+          <div class="nutrition-grid">
+            <!-- Personalized Health Calculator -->
+            <div class="calculator-card">
+              <h3 class="calc-title">
+                <span>⚖️</span> Tính toán chỉ số cơ thể (BMI & Calo)
+              </h3>
+              <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">
+                Dựa trên thông tin hồ sơ của bạn (Nữ, 22 tuổi, 156cm, 50kg, ít vận động):
+              </p>
+
+              <div class="calc-result-box">
+                <div style="font-size: 0.84rem; color: var(--text-muted);">Chỉ số khối cơ thể (BMI)</div>
+                <div class="calc-result-number" id="calc-bmi-val">20.5</div>
+                <div class="calc-result-tag" id="calc-bmi-status">Vóc dáng Chuẩn • Cân đối</div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;">
+                <div style="background: var(--pastel-green-light); padding: 12px; border-radius: var(--radius-md); text-align: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Calo duy trì (TDEE)</div>
+                  <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary-green);" id="calc-tdee-val">~1.550 kcal</div>
+                </div>
+                <div style="background: var(--pastel-green-light); padding: 12px; border-radius: var(--radius-md); text-align: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Nước khuyến nghị</div>
+                  <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary-green);" id="calc-water-val">~2.0 - 2.2 Lít</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 16px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.5; background: #FFFDF8; border: 1px dashed #EAD8AE; padding: 12px; border-radius: var(--radius-md);">
+                💡 <strong>Mẹo cho vóc dáng:</strong> Để giữ dáng khỏe và săn chắc, bạn nên duy trì mức năng lượng nạp vào khoảng <strong>1.300 - 1.450 kcal/ngày</strong>, ưu tiên đạm sạch (ức gà, trứng, tôm) và tinh bột chậm (khoai lang, cơm lượng vừa).
+              </div>
+            </div>
+
+            <!-- Health Principles -->
+            <div class="nutrition-guide-card">
+              <h3 class="calc-title">
+                <span>🥗</span> 4 Nguyên tắc vàng trong thực đơn 7 ngày
+              </h3>
+              <div class="guide-article">
+                <div class="guide-item">
+                  <div class="guide-item-title">1. Quy tắc đĩa ăn cân đối (50 - 25 - 25)</div>
+                  <div class="guide-item-desc">Mỗi bữa ăn chính gồm 50% rau củ luộc thanh đạm, 25% protein nạc (ức gà, tôm, cá, đậu phụ, trứng) và 25% tinh bột tốt (cơm 150g, khoai lang).</div>
+                </div>
+                <div class="guide-item">
+                  <div class="guide-item-title">2. Ăn bữa phụ thông minh</div>
+                  <div class="guide-item-desc">Bữa phụ giữa chiều với chuối, sữa chua không đường giúp duy trì đường huyết ổn định, ngăn chặn cơn thèm đồ ngọt vào bữa tối.</div>
+                </div>
+                <div class="guide-item">
+                  <div class="guide-item-title">3. Hạn chế tối đa gia vị đậm và dầu mỡ</div>
+                  <div class="guide-item-desc">Ưu tiên luộc, hấp, áp chảo ít dầu. Tránh nêm nhiều đường, muối để cơ thể không bị tích nước hay sưng phù.</div>
+                </div>
+                <div class="guide-item">
+                  <div class="guide-item-title">4. Tối ưu ngân sách 70.000đ/ngày</div>
+                  <div class="guide-item-desc">Mua thực phẩm theo tuần, mua ức gà và trứng theo số lượng nhiều tại siêu thị hoặc chợ đầu mối giúp tiết kiệm 25-30% chi phí.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: CÀI ĐẶT & QUẢN LÝ (SETTINGS) -->
+        <section id="view-settings" class="view-section">
+          <div class="settings-grid">
+            <!-- Edit Profile Form -->
+            <div class="settings-card">
+              <h3 class="calc-title">
+                <span>👤</span> Chỉnh sửa thông tin cá nhân & Ngân sách
+              </h3>
+              <form id="profile-settings-form">
+                <div class="form-group">
+                  <label class="form-label" for="setting-gender">Giới tính</label>
+                  <select id="setting-gender" class="form-select">
+                    <option value="Nữ">Nữ</option>
+                    <option value="Nam">Nam</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="setting-age">Tuổi</label>
+                  <input type="number" id="setting-age" class="form-input" min="15" max="80" value="22" required />
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div class="form-group">
+                    <label class="form-label" for="setting-height">Chiều cao (cm)</label>
+                    <input type="number" id="setting-height" class="form-input" min="120" max="220" value="156" required />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="setting-weight">Cân nặng (kg)</label>
+                    <input type="number" id="setting-weight" class="form-input" min="30" max="150" value="50" required />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="setting-activity">Mức độ vận động</label>
+                  <select id="setting-activity" class="form-select">
+                    <option value="Ít vận động">Ít vận động (làm việc văn phòng, ít tập)</option>
+                    <option value="Vận động nhẹ">Vận động nhẹ (tập 1-3 buổi/tuần)</option>
+                    <option value="Vận động vừa">Vận động vừa (tập 3-5 buổi/tuần)</option>
+                    <option value="Vận động nhiều">Vận động nhiều (tập thể thao hàng ngày)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="setting-budget">Ngân sách mục tiêu hàng ngày (VNĐ/ngày)</label>
+                  <input type="number" id="setting-budget" class="form-input" min="30000" max="500000" step="5000" value="70000" required />
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 11px;">
+                  <span>💾</span> Lưu thông tin hồ sơ
+                </button>
+              </form>
+            </div>
+
+            <!-- Meal Management & Backup -->
+            <div class="settings-card">
+              <h3 class="calc-title">
+                <span>⚙️</span> Quản lý dữ liệu thực đơn
+              </h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                Dữ liệu được lưu trữ trực tiếp trên trình duyệt của bạn (Local Storage), an toàn và tiện lợi.
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="background: var(--pastel-green-light); padding: 14px; border-radius: var(--radius-md);">
+                  <div style="font-weight: 700; color: var(--text-primary); font-size: 0.92rem; margin-bottom: 4px;">Thêm món ăn mới vào thực đơn</div>
+                  <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">Bạn có thể tùy biến các bữa ăn bằng món ăn riêng của bạn.</div>
+                  <button id="btn-open-add-dish-modal" class="btn-secondary">
+                    <span>➕</span> Thêm món ăn mới
+                  </button>
+                </div>
+
+                <div style="background: #FFFBF0; border: 1px solid #FFE0A3; padding: 14px; border-radius: var(--radius-md);">
+                  <div style="font-weight: 700; color: #B26E1E; font-size: 0.92rem; margin-bottom: 4px;">Khôi phục thực đơn chuẩn 7 ngày gốc</div>
+                  <div style="font-size: 0.82rem; color: #6D5627; margin-bottom: 10px;">Đặt lại thực đơn, danh sách nguyên liệu và giá về giá trị ban đầu.</div>
+                  <button id="btn-reset-all-data" class="btn-secondary" style="color: #A34848; border-color: #F0C4C4;">
+                    <span>🔄</span> Đặt lại toàn bộ dữ liệu gốc
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Mobile Detail Backdrop Overlay -->
+      <div id="detail-backdrop" class="detail-backdrop"></div>
+
+      <!-- ------------------------------------------------------------
+           COLUMN C: RIGHT DISH DETAIL PANEL (~400px)
+           (Matches exact preview in mockup)
+           ------------------------------------------------------------ -->
+      <aside class="right-detail-panel" id="right-detail-panel">
+        <!-- Top bar in detail panel -->
+        <div class="detail-panel-topbar">
+          <button class="btn-back-menu" id="btn-back-to-menu">
+            <span>←</span> Quay lại thực đơn
+          </button>
+          <div class="detail-actions-right">
+            <button class="btn-detail-fav" id="btn-dish-fav" title="Yêu thích món này">
+              ♥
+            </button>
+            <button class="btn-close-detail-mobile" id="btn-close-detail-mobile" title="Đóng">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Big Hero Dish Image -->
+        <div class="detail-hero-wrap">
+          <img src="" alt="Món ăn chi tiết" id="detail-dish-img" class="detail-hero-img" />
+          <span class="detail-category-badge" id="detail-category-badge">Bữa trưa</span>
+          <span class="detail-calories-badge" id="detail-calories-badge">~ 280 kcal</span>
+        </div>
+
+        <!-- Dish Title & Tagline -->
+        <h2 class="detail-dish-title" id="detail-dish-title">Tôm luộc</h2>
+        <p class="detail-dish-tagline" id="detail-dish-tagline">Thanh đạm • Giàu protein • Tốt cho vóc dáng</p>
+
+        <!-- Quick Attributes Grid -->
+        <div class="detail-attributes-grid">
+          <div class="detail-attr-box">
+            <span class="attr-icon">⏱️</span>
+            <span class="attr-label">Thời gian</span>
+            <span class="attr-value" id="detail-prep-time">15 phút</span>
+          </div>
+          <div class="detail-attr-box">
+            <span class="attr-icon">🍃</span>
+            <span class="attr-label">Độ khó</span>
+            <span class="attr-value" id="detail-difficulty">Dễ</span>
+          </div>
+          <div class="detail-attr-box">
+            <span class="attr-icon">👥</span>
+            <span class="attr-label">Khẩu phần</span>
+            <span class="attr-value" id="detail-serving-text">1 người</span>
+          </div>
+        </div>
+
+        <!-- Portion Scaler -->
+        <div class="portion-scaler-wrap">
+          <span class="portion-label">
+            <span>🍽️</span> Điều chỉnh khẩu phần:
+          </span>
+          <div class="portion-counter">
+            <button class="btn-portion-step" id="btn-portion-dec" title="Giảm khẩu phần">-</button>
+            <span class="portion-number" id="detail-portion-count">1</span>
+            <button class="btn-portion-step" id="btn-portion-inc" title="Tăng khẩu phần">+</button>
+          </div>
+        </div>
+
+        <!-- Ingredients Table (for 1 or N portions) -->
+        <div class="ingredients-detail-box">
+          <div class="detail-section-title">
+            <span class="section-icon">🍃</span>
+            <span id="detail-ingredients-heading">Nguyên liệu (cho 1 phần)</span>
+          </div>
+          <div class="ingredients-table-wrap">
+            <table class="ingredients-table">
+              <thead>
+                <tr>
+                  <th>Nguyên liệu</th>
+                  <th>Khối lượng</th>
+                  <th style="text-align: right;">Giá (VNĐ)</th>
+                </tr>
+              </thead>
+              <tbody id="detail-ingredients-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+            <div class="detail-cost-summary-bar">
+              <span class="cost-summary-label">Tổng chi phí ước tính</span>
+              <span class="cost-summary-value" id="detail-total-cost">~ 26.000đ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Cooking Steps -->
+        <div class="cooking-steps-box">
+          <div class="detail-section-title">
+            <span class="section-icon">🍳</span>
+            <span>Cách chế biến</span>
+          </div>
+          <div class="steps-list" id="detail-steps-list">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Chef's Tips & Notes -->
+        <div class="detail-tips-box">
+          <div class="tips-title">
+            <span>💡</span> Mẹo nhỏ
+          </div>
+          <ul class="tips-list" id="detail-tips-list">
+            <!-- Injected via JavaScript -->
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- ==============================================================
+         3. MOBILE BOTTOM NAVIGATION (Visible on screens <= 860px)
+         ============================================================== -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-nav-btn active" data-view="menu7d">
+        <span class="mobile-nav-icon">📅</span>
+        <span>Thực đơn</span>
       </button>
-    </div>
-    <div class="floating-icons">
-      <span class="float-icon" style="--delay:0s; --x:10%">🌿</span>
-      <span class="float-icon" style="--delay:1s; --x:80%">🔥</span>
-      <span class="float-icon" style="--delay:2s; --x:50%">🏘️</span>
-      <span class="float-icon" style="--delay:0.5s; --x:30%">⚔</span>
-      <span class="float-icon" style="--delay:1.5s; --x:65%">✨</span>
-    </div>
-  </div>
+      <button class="mobile-nav-btn" data-view="ingredients">
+        <span class="mobile-nav-icon">🧺</span>
+        <span>Nguyên liệu</span>
+      </button>
+      <button class="mobile-nav-btn" data-view="costs">
+        <span class="mobile-nav-icon">💰</span>
+        <span>Chi phí</span>
+      </button>
+      <button class="mobile-nav-btn" data-view="nutrition">
+        <span class="mobile-nav-icon">📖</span>
+        <span>Dinh dưỡng</span>
+      </button>
+      <button class="mobile-nav-btn" data-view="settings">
+        <span class="mobile-nav-icon">⚙️</span>
+        <span>Cài đặt</span>
+      </button>
+    </nav>
 
-  <!-- ===== SCREEN: WORLD SELECT ===== -->
-  <div id="screen-world-select" class="screen">
-    <div class="world-select-bg"></div>
-    <div class="world-select-content">
-      <h2 class="section-title">🗺 CHỌN THẾ GIỚI</h2>
-      <p class="section-sub">Hoàn thành cả 3 cõi để giải phóng phần thưởng cuối!</p>
-      <div id="progress-panel" class="progress-panel">
-        <div class="progress-title">TIẾN ĐỘ</div>
-        <div class="progress-items">
-          <div id="prog-linh" class="prog-item">☐ Linh Giới</div>
-          <div id="prog-ma" class="prog-item">☐ Ma Giới</div>
-          <div id="prog-nhan" class="prog-item">☐ Nhân Giới</div>
+    <!-- ==============================================================
+         4. MODALS & TOAST NOTIFICATION
+         ============================================================== -->
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Add/Edit Meal Modal -->
+    <div id="modal-add-dish" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">Thêm món ăn mới vào thực đơn</h3>
+          <button class="btn-close-modal" id="btn-close-add-dish-modal">✕</button>
         </div>
-      </div>
-      <div class="world-cards">
-        <div id="card-linh" class="world-card world-linh" onclick="selectWorld('linh')">
-          <div class="card-glow"></div>
-          <div class="card-icon">🌿</div>
-          <div class="card-name">LINH GIỚI</div>
-          <div class="card-desc">Thế giới của thiên thần và những sinh vật ánh sáng.</div>
-          <div class="card-status" id="status-linh"></div>
-          <div class="card-border-anim"></div>
-        </div>
-        <div id="card-ma" class="world-card world-ma" onclick="selectWorld('ma')">
-          <div class="card-glow"></div>
-          <div class="card-icon">🔥</div>
-          <div class="card-name">MA GIỚI</div>
-          <div class="card-desc">Thế giới của quỷ và những sinh vật nguy hiểm.</div>
-          <div class="card-status" id="status-ma"></div>
-          <div class="card-border-anim"></div>
-        </div>
-        <div id="card-nhan" class="world-card world-nhan" onclick="selectWorld('nhan')">
-          <div class="card-glow"></div>
-          <div class="card-icon">🏘️</div>
-          <div class="card-name">NHÂN GIỚI</div>
-          <div class="card-desc">Thế giới bình yên (?) của loài người.</div>
-          <div class="card-status" id="status-nhan"></div>
-          <div class="card-border-anim"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== SCREEN: GAME WORLD ===== -->
-  <div id="screen-game" class="screen">
-    <!-- HUD -->
-    <div id="hud" class="hud">
-      <div class="hud-player">
-        <span class="hud-label">⚔ TIẾN</span>
-        <div class="hp-bar-wrap">
-          <div id="player-hp-bar" class="hp-bar player-hp"></div>
-        </div>
-        <span id="player-hp-text" class="hp-text">100/100</span>
-      </div>
-      <div class="hud-world-name" id="hud-world-name">NHÂN GIỚI</div>
-      <button class="btn btn-sm btn-outline" onclick="returnToWorldSelect()">🗺 Map</button>
-    </div>
-
-    <!-- GAME CANVAS AREA -->
-    <div id="game-world" class="game-world">
-      <!-- Background layers -->
-      <div id="bg-layer-far" class="bg-layer bg-far"></div>
-      <div id="bg-layer-mid" class="bg-layer bg-mid"></div>
-      <div id="bg-layer-ground" class="bg-layer bg-ground"></div>
-
-      <!-- World decorations injected by JS -->
-      <div id="world-decorations" class="world-decorations"></div>
-
-      <!-- NPC -->
-      <div id="npc-entity" class="npc-entity hidden">
-        <div class="npc-sprite" id="npc-sprite"></div>
-        <div class="npc-name-tag" id="npc-name-tag"></div>
-        <div class="talk-bubble">💬</div>
-      </div>
-
-      <!-- Enemy -->
-      <div id="enemy-entity" class="enemy-entity hidden">
-        <div class="enemy-sprite" id="enemy-sprite"></div>
-        <div class="enemy-name-tag" id="enemy-name-tag"></div>
-        <div class="enemy-hp-wrap">
-          <div id="enemy-hp-bar" class="hp-bar enemy-hp"></div>
-        </div>
-        <span id="enemy-hp-text" class="hp-text">100/100</span>
-      </div>
-
-      <!-- Player -->
-      <div id="player-entity" class="player-entity">
-        <div id="player-sprite" class="player-sprite idle"></div>
-        <div class="player-name-tag">Tiến</div>
-      </div>
-
-      <!-- Damage numbers container -->
-      <div id="damage-numbers" class="damage-numbers"></div>
-    </div>
-
-    <!-- DIALOGUE BOX -->
-    <div id="dialogue-box" class="dialogue-box hidden">
-      <div class="dialogue-header">
-        <span id="dialogue-speaker-icon" class="dialogue-icon">👴</span>
-        <span id="dialogue-speaker" class="dialogue-speaker">Ông Già</span>
-      </div>
-      <div id="dialogue-text" class="dialogue-text"></div>
-      <div id="dialogue-answers" class="dialogue-answers hidden">
-        <!-- answer buttons injected by JS -->
-      </div>
-      <div id="dialogue-feedback" class="dialogue-feedback hidden"></div>
-      <button id="btn-dialogue-next" class="btn btn-primary btn-sm hidden" onclick="dialogueNext()">Tiếp tục →</button>
-    </div>
-
-    <!-- COMBAT UI -->
-    <div id="combat-ui" class="combat-ui hidden">
-      <div class="combat-players">
-        <div class="combat-player">
-          <div class="combat-sprite player-combat-sprite" id="combat-player-sprite"></div>
-          <div class="combat-name">⚔ Tiến</div>
-          <div class="combat-hp-wrap">
-            <div id="combat-player-hp-bar" class="hp-bar player-hp"></div>
+        <form id="form-add-new-dish">
+          <div class="form-group">
+            <label class="form-label" for="add-dish-day">Ngày trong tuần</label>
+            <select id="add-dish-day" class="form-select" required>
+              <option value="thu2">Thứ 2</option>
+              <option value="thu3">Thứ 3</option>
+              <option value="thu4">Thứ 4</option>
+              <option value="thu5">Thứ 5</option>
+              <option value="thu6">Thứ 6</option>
+              <option value="thu7">Thứ 7</option>
+              <option value="chunhat">Chủ nhật</option>
+            </select>
           </div>
-          <span id="combat-player-hp-text" class="hp-text">100/100</span>
-        </div>
-        <div class="vs-text">VS</div>
-        <div class="combat-enemy">
-          <div class="combat-sprite enemy-combat-sprite" id="combat-enemy-sprite"></div>
-          <div class="combat-name" id="combat-enemy-name">👾 Quái Vật</div>
-          <div class="combat-hp-wrap">
-            <div id="combat-enemy-hp-bar" class="hp-bar enemy-hp"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-dish-meal">Bữa ăn</label>
+            <select id="add-dish-meal" class="form-select" required>
+              <option value="sang">Bữa sáng</option>
+              <option value="trua">Bữa trưa</option>
+              <option value="phu">Bữa phụ</option>
+              <option value="toi">Bữa tối</option>
+            </select>
           </div>
-          <span id="combat-enemy-hp-text" class="hp-text">100/100</span>
-        </div>
-      </div>
-      <div class="combat-log" id="combat-log"></div>
-      <div class="combat-actions">
-        <button id="btn-attack" class="btn btn-danger" onclick="attackEnemy()">⚔ TẤN CÔNG</button>
+
+          <div class="form-group">
+            <label class="form-label" for="add-dish-name">Tên món ăn</label>
+            <input type="text" id="add-dish-name" class="form-input" placeholder="Ví dụ: Salad ức gà áp chảo" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-dish-tagline">Mô tả ngắn</label>
+            <input type="text" id="add-dish-tagline" class="form-input" placeholder="Ví dụ: Giàu đạm, thanh nhẹ cho bữa trưa" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+              <label class="form-label" for="add-dish-time">Thời gian (phút)</label>
+              <input type="number" id="add-dish-time" class="form-input" value="15" min="5" max="120" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="add-dish-cals">Năng lượng (kcal)</label>
+              <input type="number" id="add-dish-cals" class="form-input" value="300" min="50" max="1500" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-dish-img-url">Link ảnh món ăn (tùy chọn)</label>
+            <input type="url" id="add-dish-img-url" class="form-input" placeholder="https://images.unsplash.com/..." />
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+            <button type="button" class="btn-secondary" id="btn-cancel-add-dish">Hủy</button>
+            <button type="submit" class="btn-primary"><span>💾</span> Lưu món ăn</button>
+          </div>
+        </form>
       </div>
     </div>
 
-    <!-- GAME OVER -->
-    <div id="game-over" class="game-over hidden">
-      <div class="game-over-content">
-        <div class="game-over-icon">💀</div>
-        <h2>GAME OVER</h2>
-        <p>Tiến đã ngã xuống...</p>
-        <button class="btn btn-primary" onclick="restartCurrentWorld()">🔄 CHƠI LẠI</button>
-      </div>
-    </div>
-
-    <!-- WORLD COMPLETE -->
-    <div id="world-complete" class="world-complete hidden">
-      <div class="world-complete-content">
-        <div class="complete-icon">🏆</div>
-        <h2 id="world-complete-title">NHÂN GIỚI ĐÃ HOÀN THÀNH!</h2>
-        <div class="complete-stars">⭐⭐⭐</div>
-        <button class="btn btn-primary" onclick="returnToWorldSelect()">🗺 Chọn Thế Giới Khác</button>
-      </div>
-    </div>
-
-    <!-- MOBILE CONTROLS -->
-    <div class="mobile-controls" id="mobile-controls">
-      <button class="ctrl-btn" id="ctrl-left" onpointerdown="startMove('left')" onpointerup="stopMove()"
-        onpointercancel="stopMove()">◀</button>
-      <button class="ctrl-btn" id="ctrl-attack" onclick="mobileAttack()">⚔</button>
-      <button class="ctrl-btn" id="ctrl-right" onpointerdown="startMove('right')" onpointerup="stopMove()"
-        onpointercancel="stopMove()">▶</button>
-    </div>
   </div>
 
-  <!-- ===== SCREEN: REWARD ===== -->
-  <div id="screen-reward" class="screen">
-    <div class="reward-bg"></div>
-    <div class="reward-stars" id="reward-stars"></div>
-    <div class="reward-content">
-      <h2 class="reward-title">🏆 KHO BÁU CUỐI CÙNG</h2>
-      <p class="reward-desc">Bạn đã vượt qua cả 3 cõi.</p>
-      <p class="reward-desc">Hãy mở chiếc rương để nhận phần thưởng.</p>
-      <div id="chest" class="chest" onclick="openChest()">
-        <div class="chest-body">
-          <div class="chest-lid" id="chest-lid">
-            <div class="chest-question">?</div>
-          </div>
-          <div class="chest-base"></div>
-        </div>
-        <div class="chest-glow"></div>
-        <div class="chest-particles" id="chest-particles"></div>
-      </div>
-      <button id="btn-open-chest" class="btn btn-gold btn-glow" onclick="openChest()">🔓 MỞ RƯƠNG</button>
-    </div>
-
-    <!-- REWARD REVEAL -->
-    <div id="reward-reveal" class="reward-reveal hidden">
-      <div class="light-burst" id="light-burst"></div>
-      <div class="reward-paper">
-        <div class="paper-decoration">✦ ✦ ✦</div>
-        <div class="reward-main-text">Bạn được thưởng<br /><span class="reward-kiss">1 cái hun ❤️</span></div>
-        <div class="reward-congrats">NHẤT BẠN NHÉ!</div>
-        <div class="paper-decoration">✦ ✦ ✦</div>
-      </div>
-      <button class="btn btn-primary btn-glow" onclick="restartGame()" style="margin-top:2rem;">🔄 CHƠI LẠI</button>
-    </div>
-  </div>
-
+  <!-- JavaScript logic -->
   <script src="script.js"></script>
 </body>
 
