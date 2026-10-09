@@ -1078,6 +1078,50 @@ function formatVND(amount) {
 }
 
 /**
+ * Cấu hình quy cách đóng gói và công thức tính giá tự động cho cột Ghi chú mua sắm
+ */
+const RETAIL_PACK_CONFIG = {
+  tom_tuoi: (p) => `Khay 500g (~${formatVND(p * 0.5)})`,
+  uc_ga: (p) => `Khay 500g (~${formatVND(p * 0.5)})`,
+  thit_heo_nac: (p) => `Miếng 300g (~${formatVND(p * 0.3)})`,
+  ca_loc: (p) => `Khay 300g (~${formatVND(p * 0.3)})`,
+  trung_ga: (p) => `Hộp 10 quả (${formatVND(p * 10)})`,
+  sua_tuoi: (p) => `Lốc 4 hộp 180ml (${formatVND(p * 4)})`,
+  sua_chua: (p) => `Lốc 4 hũ 100g (${formatVND(p * 4)})`,
+  dau_phu: (p) => `Miếng 150g (${formatVND(p)})`,
+  gao_trang: (p) => `Túi 5kg (~${formatVND(p * 5)})`,
+  khoai_lang: (p) => `Túi 1kg (~${formatVND(p * 4)} / 4 củ)`,
+  banh_mi: (p) => `1 ổ (${formatVND(p)})`,
+  chuoi: (p) => `Nải 1-1.5kg (~${formatVND(Math.round((p * 8.333) / 1000) * 1000)})`,
+  tao_do: (p) => `Túi 1kg (~${formatVND(p * 5)} / 5 quả)`,
+  du_du: (p) => `1 quả 800g (~${formatVND(Math.round((p * 3.333) / 1000) * 1000)})`,
+  trai_cay_mix: (p) => `Khay hoa quả (~${formatVND(p * 2.5)})`,
+  bap_cai: (p) => `Bắp 800g (~${formatVND(p * 3)})`,
+  su_hao_ca_rot: (p) => `Combo rau củ (~${formatVND(p * 2.4)})`,
+  cai_thia: (p) => `Bó 400g (~${formatVND(p * 2.5)})`,
+  rau_muong: (p) => `Mớ rau muống (~${formatVND(p * 2)})`,
+  bi_dao: (p) => `1 quả bí đao (~${formatVND(p * 3)})`,
+  bi_do: (p) => `Khúc bí đỏ 400g (~${formatVND(p * 2)})`,
+  rau_xanh_mix: (p) => `Bó rau xanh (~${formatVND(p * 2)})`,
+  ca_chua: (p) => `Túi 500g (~${formatVND(p * 5)})`,
+  rau_dua: (p) => `Bó rau thơm dưa leo (~${formatVND(p * 3)})`,
+  dau_phong: (p) => `Gói 100g (~${formatVND(p * 4)})`,
+  muoi_gia_vi: (p) => p === 500 ? 'Gói gia vị dùng nhiều lần' : `Gói gia vị (~${formatVND(p * 20)})`
+};
+
+/**
+ * Tự động tính toán ghi chú mua sắm ứng với giá người dùng sửa
+ */
+function getDynamicRetailPack(ingId, unitPrice, fallbackText = '') {
+  const p = Number(unitPrice) || 0;
+  const fn = RETAIL_PACK_CONFIG[ingId];
+  if (typeof fn === 'function') {
+    return fn(p);
+  }
+  return fallbackText || 'Quy cách chuẩn';
+}
+
+/**
  * Tính chi phí của 1 nguyên liệu cụ thể trong món
  */
 function calculateIngredientCost(ingItem, portionMultiplier = 1) {
@@ -1144,7 +1188,7 @@ function aggregateWeeklyIngredients() {
           category: master.category,
           unit: master.unit,
           unitPrice: master.unitPrice,
-          retailPack: master.retailPack,
+          retailPack: getDynamicRetailPack(master.id, master.unitPrice, master.retailPack),
           note: master.note,
           totalAmount: 0,
           usedCount: 0
@@ -1806,15 +1850,41 @@ function renderPriceMasterTable() {
 
   Object.values(state.ingredients).forEach(ing => {
     const tr = document.createElement('tr');
+    const dynamicPack = getDynamicRetailPack(ing.id, ing.unitPrice, ing.retailPack);
     tr.innerHTML = `
       <td><strong>${ing.name}</strong></td>
       <td><span class="category-tag">${ing.unit}</span></td>
       <td>
-        <input type="number" class="unit-price-input" data-id="${ing.id}" value="${ing.unitPrice}" step="500" min="0" />
+        <input type="number" class="unit-price-input" data-id="${ing.id}" value="${ing.unitPrice}" step="500" min="0" title="Nhập đơn giá mới tại chợ/siêu thị" />
       </td>
-      <td style="color: var(--text-muted); font-size: 0.82rem;">${ing.retailPack || 'Quy cách chuẩn'}</td>
+      <td class="retail-pack-cell" data-id="${ing.id}">
+        <span class="retail-pack-badge">${dynamicPack}</span>
+      </td>
     `;
     tbody.appendChild(tr);
+  });
+
+  // Gắn sự kiện: khi người dùng điều chỉnh giá, cột ghi chú mua sắm tự điều chỉnh NGAY LẬP TỨC
+  tbody.querySelectorAll('.unit-price-input').forEach(input => {
+    const updateCellNote = (e) => {
+      const ingId = e.target.dataset.id;
+      const newPrice = Number(e.target.value) || 0;
+      const noteCell = tbody.querySelector(`.retail-pack-cell[data-id="${ingId}"]`);
+      if (noteCell) {
+        const ing = state.ingredients[ingId];
+        const updatedPack = getDynamicRetailPack(ingId, newPrice, ing ? ing.retailPack : '');
+        noteCell.innerHTML = `<span class="retail-pack-badge updated">${updatedPack}</span>`;
+      }
+    };
+
+    input.addEventListener('input', updateCellNote);
+    input.addEventListener('change', updateCellNote);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const savePricesBtn = document.getElementById('btn-save-custom-prices');
+        if (savePricesBtn) savePricesBtn.click();
+      }
+    });
   });
 }
 
@@ -2333,16 +2403,19 @@ function initEventHandlers() {
         const val = Number(input.value);
         if (updated[id] && !isNaN(val) && val >= 0) {
           updated[id].unitPrice = val;
+          updated[id].retailPack = getDynamicRetailPack(id, val, updated[id].retailPack);
         }
       });
 
       state.saveCustomPrices(updated);
       renderCostEstimates();
+      renderPriceMasterTable();
+      renderShoppingList();
       renderMealPlan();
       const currentDish = state.meals.find(m => m.id === state.selectedDishId);
       if (currentDish) renderDishDetail(currentDish);
 
-      showToast('Đã cập nhật bảng giá nguyên liệu thành công!', 'success');
+      showToast('Đã lưu bảng giá và tự động cập nhật ghi chú mua sắm!', 'success');
     });
   }
 
@@ -2352,6 +2425,8 @@ function initEventHandlers() {
         state.ingredients = JSON.parse(JSON.stringify(DEFAULT_INGREDIENTS));
         state.saveCustomPrices(state.ingredients);
         renderCostEstimates();
+        renderPriceMasterTable();
+        renderShoppingList();
         renderMealPlan();
         const currentDish = state.meals.find(m => m.id === state.selectedDishId);
         if (currentDish) renderDishDetail(currentDish);
@@ -2481,6 +2556,8 @@ function initEventHandlers() {
 function initApp() {
   renderUserProfile();
   renderMealPlan();
+  renderShoppingList();
+  renderCostEstimates();
 
   // Mặc định chọn món "Tôm luộc" (Thứ 3 Bữa tối) như trong hình mẫu
   const defaultDish = state.meals.find(m => m.id === state.selectedDishId) || state.meals[0];

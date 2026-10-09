@@ -1928,6 +1928,39 @@ img {
   outline: none;
 }
 
+.retail-pack-cell {
+  vertical-align: middle;
+}
+
+.retail-pack-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: #FFF9EE;
+  color: #7D5F18;
+  border: 1px solid #EEDFBB;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.retail-pack-badge.updated {
+  background: #EAF7EE;
+  color: var(--primary-green-dark);
+  border-color: #A3D8B0;
+  font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(78, 142, 94, 0.15);
+  animation: pulseBadge 0.3s ease-out;
+}
+
+@keyframes pulseBadge {
+  0% { transform: scale(0.96); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
 /* ===================================================================
    VIEW 4: NUTRITION & HEALTH GUIDE (KIẾN THỨC DINH DƯỠNG)
    =================================================================== */
